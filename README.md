@@ -8,7 +8,7 @@ NKN mining web application.
 2. clone or download this repository
 3. cd to the directory
 4. run ./build.sh script
-5. when script down, you will find the output file under ./dist directory
+5. when script done, you will find the output file under ./dist directory
 
 ## How to use
 [NKNMining-Guides](https://github.com/nknorg/nkn-mining/releases/download/v0.0.1/NKNMining-Guides.pptx)
