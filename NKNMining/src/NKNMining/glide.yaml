@@ -1,0 +1,17 @@
+package: NKNMining
+ignore:
+- golang.org/x/sys/unix
+- golang.org/x/crypto/ssh/terminal
+- google.golang.org/appengine/cloudsql
+import:
+- package: github.com/golang/crypto
+- package: github.com/urfave/cli
+- package: github.com/sirupsen/logrus
+- package: github.com/itchyny/base58-go
+- package: github.com/go-sql-driver/mysql
+- package: github.com/julienschmidt/httprouter
+- package: github.com/gin-gonic/gin
+  version: v1.3.0
+- package: github.com/pborman/uuid
+- package: github.com/mholt/archiver
+  version: v2.1.0

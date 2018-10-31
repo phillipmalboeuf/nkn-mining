@@ -1,0 +1,6 @@
+NKNMining/bin
+NKNMining/pkg
+NKNMining/src/NKNMining/vendor
+.DS_Store
+*.log
+.idea
