@@ -16,6 +16,9 @@ cd ./NKNMining/web/
 npm install
 npm run build
 
+mkdir -p ../../dist/mac/web/
+mkdir -p ../../dist/linux/web/
+
 cp -r ./dist/* ../../dist/mac/web/
 cp -r ./dist/* ../../dist/linux/web/
 
@@ -24,7 +27,6 @@ cd ../src/NKNMining/
 echo 'install golang package'
 glide install
 
-cd ./NKNMining/src/NKNMining
 echo 'build MAC version'
 GOPATH=$GOPATH:$PWD/../../ GOOS=darwin GOARCH=amd64 go build
 mv ./NKNMining ../../../dist/mac/
