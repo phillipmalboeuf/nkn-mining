@@ -15,7 +15,6 @@ import Http from "./js/network/nsHttp"
 import {serverStatus} from "./js/nsConst"
 import {nsNamespace} from "./js/nsNamespace";
 import NSLocalStorage from "./js/nsLocalStorage"
-// import nknWallet from "nkn-wallet"
 
 export default {
   components: {

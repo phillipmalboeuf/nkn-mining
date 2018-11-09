@@ -141,7 +141,6 @@
   import NSLocalStorage from "../js/nsLocalStorage"
   import FileSaver from 'file-saver'
   import Crypto from '../js/crypto/algorithm'
-  // import nknWallet from 'nkn-wallet'
 
   function loopStatusQuery(scope) {
     Http.getStatus(scope, function (data) {
@@ -216,30 +215,20 @@
       return
     }
 
-    tempWallet.queryAssetBalance(scope.walletAddress, function (balance) {
-      scope.balance = balance.toString()
-      console.log(scope.balance)
+    tempWallet.queryAssetBalance(scope.walletAddress)
+      .then(function (balance) {
+        scope.balance = balance.toString()
 
-      setTimeout(function () {
-        loopWalletQuery(scope, tempWallet)
-      }, 3000)
+        setTimeout(function () {
+          loopWalletQuery(scope, tempWallet)
+        }, 3000)
 
-    }, function () {
-      setTimeout(function () {
-        loopWalletQuery(scope, tempWallet)
-      }, 3000)
-    }).then(function (balance) {
-      scope.balance = balance.toString()
-
-      setTimeout(function () {
-        loopWalletQuery(scope, tempWallet)
-      }, 3000)
-
-    }).catch( function () {
-      setTimeout(function () {
-        loopWalletQuery(scope, tempWallet)
-      }, 3000)
-    })
+      })
+      .catch( function () {
+        setTimeout(function () {
+          loopWalletQuery(scope, tempWallet)
+        }, 3000)
+      })
   }
 
   function loopMiningRewardsQuery(scope) {

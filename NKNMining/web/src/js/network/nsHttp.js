@@ -2,9 +2,6 @@ import Axios from "axios"
 import Is from "is_js"
 import {RequestData} from "./nsRequestData";
 
-// const baseURI = '/api/v1'
-// const nknDataCenter = 'http://35.202.14.190:7890/api/v1'
-
 function axiosRequest(scope, apiURI, param, success, fail) {
   Axios.post(nknShellWebConfig.baseURI + apiURI, param, {
     headers: { 'Content-Type': 'text/plain' }
