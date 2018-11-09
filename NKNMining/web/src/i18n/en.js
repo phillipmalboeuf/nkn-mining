@@ -1,16 +1,17 @@
 export default {
+  mark: 'NKN',
   nsNav: {
     signOut: 'Sign out',
-    resetNodeShell: 'Reset Node shell'
+    resetNodeShell: 'Reset @:mark mining'
   },
   nsFooter: {
-    copyright: 'Copyright {i} 2017-2018 NKN    |    All rights reserved',
+    copyright: 'Copyright {i} 2017-2018 @:mark    |    All rights reserved',
     attention: 'This software is in the early development stage and may not have all functions working properly. It should be used only for testing now. '
   },
   nsInput: {
     account: {
       title: 'Account',
-      placeholder: 'Your NKN shell account',
+      placeholder: 'Your @:mark shell account',
       errorInfo: 'Alphanumeric only!'
     },
     password: {
@@ -41,7 +42,7 @@ export default {
   },
   nsSignIn: {
     titleLabel: 'Welcome to',
-    title: 'NKN NODE',
+    title: '@:mark NODE',
     signInbtn: 'Sign in',
     loginfail:'login failed!'
   },
@@ -69,7 +70,7 @@ export default {
       version: {
         init: 'Querying version ...'
       },
-      NKNBlockHeight: 'NKN network block height:',
+      NKNBlockHeight: '@:mark network block height:',
       myBlockHeight: 'my block height:'
     },
     wallet: {
@@ -81,7 +82,7 @@ export default {
         init: 'Querying balance ...'
       },
       balanceLabel: 'Balance',
-      balanceUnit: 'NKN'
+      balanceUnit: '@:mark'
     },
     neighbors: {
       title: 'Neighbors',
@@ -97,9 +98,9 @@ export default {
       time: 'Time'
     },
     transfer: {
-      title: 'Transfer NKN',
+      title: 'Transfer @:mark',
       addressPlaceholder: 'target address',
-      countPlaceholder: 'how much NKN to transfer',
+      countPlaceholder: 'how much @:mark to transfer',
       passwordPlaceholder: 'wallet password',
       cancel: 'Cancel',
       confirm: 'Transfer',
@@ -109,7 +110,7 @@ export default {
     },
     resetdlg: {
       title: 'Reset shell confirm',
-      warning: 'Warning: This operation will reset all your NKN data, include your Wallet!',
+      warning: 'Warning: This operation will reset all your @:mark data, include your Wallet!',
       passwordPlaceholder: 'Account password',
       cancel: 'Cancel',
       reset: 'Reset',
