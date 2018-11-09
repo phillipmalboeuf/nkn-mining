@@ -7,22 +7,42 @@ export default {
     copyright: 'Copyright {i} 2017-2018 NKN    |    All rights reserved',
     attention: 'This software is in the early development stage and may not have all functions working properly. It should be used only for testing now. '
   },
+  nsInput: {
+    account: {
+      title: 'Account',
+      placeholder: 'Your NKN shell account',
+      errorInfo: 'Alphanumeric only!'
+    },
+    password: {
+      title: 'Your account password',
+      placeholder: '8-20 characters',
+      errorInfo: 'Please input 8-20 characters'
+    },
+    rePassword: {
+      title: 'Confirm account password',
+      placeholder: '8-20 characters',
+      errorInfo: 'The password for the two input is inconsistent!'
+    },
+    sn: {
+      title: 'System initialization serial number',
+      placeholder: '40 characters',
+      errorInfo: 'Invalid serial number'
+    },
+    wallet: {
+      title: ' ',
+      placeholder: 'Wallet file to load',
+      errorInfo: 'please select a wallet file'
+    },
+    walletPassword: {
+      title: 'Wallet password',
+      placeholder: 'password ot the wallet to load',
+      errorInfo: 'Please check if the password matches the wallet.'
+    }
+  },
   nsSignIn: {
     titleLabel: 'Welcome to',
     title: 'NKN NODE',
     signInbtn: 'Sign in',
-    nsInput: {
-      account: {
-        title: 'Account',
-        placeholder: 'Your NKN shell account',
-        errorInfo: 'Alphanumeric only!'
-      },
-      password: {
-        title: 'Your account password',
-        placeholder: '8-20 characters',
-        errorInfo: 'Please input 8-20 characters'
-      }
-    },
     loginfail:'login failed!'
   },
   nsMain: {
@@ -115,7 +135,8 @@ export default {
     title: 'Load wallet',
     upload: 'Select file',
     link: 'Generate wallet',
-    nextStepbtn: 'NEXT'
+    nextStepbtn: 'NEXT',
+    netWorkError: 'Network error, please try again later.'
   },
   nsShowWallet: {
     titleLabel: 'setup - step 3',

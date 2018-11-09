@@ -69,8 +69,8 @@
         inputs: {
           wallet: {
             inputId: inputIdPrefix() + "wallet-to-load",
-            title: '&nbsp;',
-            placeholder: 'Wallet file to load',
+            title: this.$t('nsInput.wallet.title'),
+            placeholder: this.$t('nsInput.wallet.placeholder'),
             hasAppend: false,
             inputType: 'text',
             maxSize: 20,
@@ -79,8 +79,8 @@
 
           password: {
             inputId: inputIdPrefix() + "password",
-            title: 'Wallet password',
-            placeholder: 'password ot the wallet to load',
+            title: this.$t('nsInput.walletPassword.title'),
+            placeholder: this.$t('nsInput.walletPassword.placeholder'),
             hasAppend: false,
             inputType: 'password',
             maxSize: 20,
@@ -128,7 +128,7 @@
         let walletFile = $fileInput.get(0).files[0]
 
         if(!walletFile) {
-          this.inputs.password.errorInfo = 'please select a wallet file'
+          this.inputs.password.errorInfo = this.$t('nsInput.wallet.errorInfo')
           return
         }
 
@@ -143,7 +143,7 @@
           console.log(_this.walletJson)
           console.log(_this.wallet)
           if (_this.wallet instanceof nknWallet.nknWalletError) {
-            _this.inputs.password.errorInfo = 'Please check if the password matches the wallet.'
+            _this.inputs.password.errorInfo = this.$t('nsInput.walletPassword.errorInfo')
             return
           }
 
@@ -173,7 +173,7 @@
             _this.$router.push({name: nsNamespace.SETUP.SHOW_WALLET})
           }, function (err) {
             _this.blockUI = false
-            _this.inputs.password.errorInfo = 'Network error, please try again later.'
+            _this.inputs.password.errorInfo = this.$t('nsLoadWallet.netWorkError')
             console.error(err)
           })
         })

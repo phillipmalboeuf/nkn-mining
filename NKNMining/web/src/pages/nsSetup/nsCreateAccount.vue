@@ -40,8 +40,8 @@
         inputs: {
           account: {
             inputId: inputIdPrefix() + "account",
-            title: 'Account',
-            placeholder: 'Alphanumeric only',
+            title: this.$t('nsInput.account.title'),
+            placeholder: this.$t('nsInput.account.placeholder'),
             hasAppend: false,
             inputType: 'text',
             maxSize: 20,
@@ -50,8 +50,8 @@
 
           password: {
             inputId: inputIdPrefix() + "password",
-            title: 'Account password',
-            placeholder: '8-20 characters',
+            title: this.$t('nsInput.password.title'),
+            placeholder: this.$t('nsInput.password.placeholder'),
             hasAppend: true,
             inputType: 'password',
             maxSize: 20,
@@ -60,8 +60,8 @@
 
           rePassword: {
             inputId: inputIdPrefix() + "rePassword",
-            title: 'Confirm account password',
-            placeholder: '8-20 characters',
+            title: this.$t('nsInput.rePassword.title'),
+            placeholder: this.$t('nsInput.rePassword.placeholder'),
             hasAppend: true,
             inputType: 'password',
             maxSize: 20,
@@ -70,8 +70,8 @@
 
           sn: {
             inputId: inputIdPrefix() + "sn",
-            title: 'System initialization serial number',
-            placeholder: '40 characters',
+            title: this.$t('nsInput.sn.title'),
+            placeholder: this.$t('nsInput.sn.placeholder'),
             hasAppend: false,
             inputType: 'text',
             errorInfo: '',
@@ -101,23 +101,23 @@
 
         if(!Is.alphaNumeric(accountInfo.account)) {
           verifyFailed = true
-          this.inputs.account.errorInfo = 'Alphanumeric only!'
+          this.inputs.account.errorInfo = this.$t('nsInput.account.errorInfo')
         }
 
         if(accountInfo.sn.length !== 40) {
           verifyFailed = true
-          this.inputs.sn.errorInfo = 'Invalid serial number'
+          this.inputs.sn.errorInfo = this.$t('nsInput.sn.errorInfo')
         }
 
         if(accountInfo.password.length < 8) {
           verifyFailed = true
-          this.inputs.password.errorInfo = 'Please input 8-20 characters'
+          this.inputs.password.errorInfo = this.$t('nsInput.password.errorInfo')
         }
 
         if(accountInfo.password !== accountInfo.rePassword) {
           verifyFailed = true
           this.inputs.password.errorInfo = ''
-          this.inputs.rePassword.errorInfo = 'The password for the two input is inconsistent!'
+          this.inputs.rePassword.errorInfo = this.$t('nsInput.rePassword.errorInfo')
         }
 
         return verifyFailed ? null : accountInfo

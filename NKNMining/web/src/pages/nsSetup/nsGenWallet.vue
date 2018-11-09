@@ -41,8 +41,8 @@
         inputs: {
           password: {
             inputId: inputIdPrefix() + "password",
-            title: 'Wallet password',
-            placeholder: '8-20 characters',
+            title: this.$t('nsInput.password.title'),
+            placeholder: this.$t('nsInput.password.placeholder'),
             hasAppend: true,
             inputType: 'password',
             maxSize: 20,
@@ -51,8 +51,8 @@
 
           rePassword: {
             inputId: inputIdPrefix() + "rePassword",
-            title: 'Confirm wallet password',
-            placeholder: '8-20 characters',
+            title: this.$t('nsInput.rePassword.title'),
+            placeholder: this.$t('nsInput.rePassword.placeholder'),
             hasAppend: true,
             inputType: 'password',
             maxSize: 20,
@@ -80,13 +80,13 @@
 
         if(walletPassword.password.length < 8) {
           verifyFailed = true
-          this.inputs.password.errorInfo = 'Please input 8-20 characters'
+          this.inputs.password.errorInfo = this.$t('nsInput.password.errorInfo')
         }
 
         if(walletPassword.password !== walletPassword.rePassword) {
           verifyFailed = true
           this.inputs.password.errorInfo = ''
-          this.inputs.rePassword.errorInfo = 'The password for the two input is inconsistent!'
+          this.inputs.rePassword.errorInfo = this.$t('nsInput.rePassword.errorInfo')
         }
 
         if(verifyFailed) {

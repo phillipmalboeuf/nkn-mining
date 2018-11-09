@@ -67,12 +67,12 @@
 
         if(!Is.alphaNumeric(accountInfo.account)) {
           verifyFailed = true
-          this.inputs.account.errorInfo = this.$t('nsSignIn.nsInput.account.errorInfo')
+          this.inputs.account.errorInfo = this.$t('nsInput.account.errorInfo')
         }
 
         if(accountInfo.password.length < 8) {
           verifyFailed = true
-          this.inputs.password.errorInfo = this.$t('nsSignIn.nsInput.password.errorInfo')
+          this.inputs.password.errorInfo = this.$t('nsInput.password.errorInfo')
         }
 
         return verifyFailed ? null : accountInfo
@@ -133,8 +133,8 @@
         inputs: {
           account: {
             inputId: inputIdPrefix() + "account",
-            title: this.$t('nsSignIn.nsInput.account.title'),
-            placeholder: this.$t('nsSignIn.nsInput.account.placeholder'),
+            title: this.$t('nsInput.account.title'),
+            placeholder: this.$t('nsInput.account.placeholder'),
             hasAppend: false,
             inputType: 'text',
             maxSize: 20,
@@ -143,8 +143,8 @@
 
           password: {
             inputId: inputIdPrefix() + "password",
-            title: this.$t('nsSignIn.nsInput.password.title'),
-            placeholder: this.$t('nsSignIn.nsInput.password.placeholder'),
+            title: this.$t('nsInput.password.title'),
+            placeholder: this.$t('nsInput.password.placeholder'),
             hasAppend: true,
             inputType: 'password',
             maxSize: 20,
