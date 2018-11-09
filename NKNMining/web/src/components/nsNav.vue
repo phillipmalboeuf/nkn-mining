@@ -15,7 +15,7 @@
                 <button class="dropdown-item" type="button"
                         @click="signOut()">{{$t("nsNav.signOut")}}</button>
                 <button class="dropdown-item" type="button"
-                        @click="resetNodeShell()">{{$t("nsNav.resetNodeShell")}}</button>
+                        @click="resetNodeShell()">{{$t("nsNav.resetNodeMining")}}</button>
             </div>
 
             <!--<div class="nkn-lang-sel"-->

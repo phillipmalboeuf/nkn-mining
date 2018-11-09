@@ -2,7 +2,7 @@ export default {
   mark: 'NKN',
   nsNav: {
     signOut: '注销',
-    resetNodeShell: '重置 @:mark 矿机'
+    resetNodeMining: '重置 @:mark 矿机'
   },
   nsFooter: {
     copyright: 'Copyright {i} 2017-2018 @:mark    |    版权所有',
@@ -92,47 +92,47 @@ export default {
     },
     rewards: {
       title: '近期挖矿奖励',
-      transaction: '交易',
-      value: 'Value',
-      height: 'Height',
-      time: 'Time'
+      transaction: '交易编号',
+      value: '交易数量',
+      height: '交易高度',
+      time: '交易时间'
     },
     transfer: {
-      title: 'Transfer @:mark',
-      addressPlaceholder: 'target address',
-      countPlaceholder: 'how much @:mark to transfer',
-      passwordPlaceholder: 'wallet password',
-      cancel: 'Cancel',
-      confirm: 'Transfer',
+      title: '@:mark 转账',
+      addressPlaceholder: '请输入转账目标地址',
+      countPlaceholder: '请输入您想转移的 @:mark 数量',
+      passwordPlaceholder: '请输入签保密吗',
+      cancel: '取消',
+      confirm: '确认转账',
       alertInfo: {
-        default: 'transfer failed!'
+        default: '转账失败！'
       }
     },
     resetdlg: {
-      title: 'Reset shell confirm',
-      warning: 'Warning: This operation will reset all your @:mark data, include your Wallet!',
-      passwordPlaceholder: 'Account password',
-      cancel: 'Cancel',
-      reset: 'Reset',
+      title: '矿机重置确认',
+      warning: '警告：该操作将会重置包括您钱包在内的所有的 @:mark 数据！',
+      passwordPlaceholder: '请输入您的 @:mark 矿机密码',
+      cancel: '取消',
+      reset: '重置',
       alertInfo: {
-        wrongPass: 'wrong password!',
-        success: 'reset node shell success'
+        wrongPass: '密码有误！',
+        success: '重置矿机成功！'
       }
     }
   },
   nsCreateAccount: {
-    titleLabel: 'setup - step 1',
-    title: 'Create account',
-    nextStepbtn: 'NEXT'
+    titleLabel: '设置 - 第一步',
+    title: '创建账号',
+    nextStepbtn: '下一步'
   },
   nsGenWallet: {
-    titleLabel: 'setup - step 2',
+    titleLabel: '设置 - 第二步',
     title: 'Generate wallet',
     link: 'Load wallet',
     nextStepbtn: 'NEXT'
   },
   nsLoadWallet: {
-    titleLabel: 'setup - step 2',
+    titleLabel: '设置 - 第二步',
     title: 'Load wallet',
     upload: 'Select file',
     link: 'Generate wallet',

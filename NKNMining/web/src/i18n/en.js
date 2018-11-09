@@ -2,7 +2,7 @@ export default {
   mark: 'NKN',
   nsNav: {
     signOut: 'Sign out',
-    resetNodeShell: 'Reset @:mark mining'
+    resetNodeMining: 'Reset @:mark mining'
   },
   nsFooter: {
     copyright: 'Copyright {i} 2017-2018 @:mark    |    All rights reserved',
@@ -11,7 +11,7 @@ export default {
   nsInput: {
     account: {
       title: 'Account',
-      placeholder: 'Your @:mark shell account',
+      placeholder: 'Your @:mark mining account',
       errorInfo: 'Alphanumeric only!'
     },
     password: {
@@ -109,14 +109,14 @@ export default {
       }
     },
     resetdlg: {
-      title: 'Reset shell confirm',
+      title: 'Reset mining confirm',
       warning: 'Warning: This operation will reset all your @:mark data, include your Wallet!',
       passwordPlaceholder: 'Account password',
       cancel: 'Cancel',
       reset: 'Reset',
       alertInfo: {
         wrongPass: 'wrong password!',
-        success: 'reset node shell success'
+        success: 'reset node mining success'
       }
     }
   },
