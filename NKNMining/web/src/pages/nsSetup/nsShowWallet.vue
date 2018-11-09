@@ -1,21 +1,21 @@
 <template>
     <div class="nkn-setup-page nkn-card-shadow nkn-after-clear">
         <div class="nkn-create-account-panel">
-            <label class="nkn-page-title-label">setup - step 3</label>
-            <h1 class="nkn-page-title text-main-blue">Download wallet</h1>
+            <label class="nkn-page-title-label">{{$(nsShowWallet.titleLabel)}}</label>
+            <h1 class="nkn-page-title text-main-blue">{{$(nsShowWallet.title)}}</h1>
             <div class="wallet-info">
                 <div class="wallet-private-key">
-                    <h4 class="info-title text-main-blue">Private key</h4>
+                    <h4 class="info-title text-main-blue">{{$(nsShowWallet.privateKey)}}</h4>
                     <div class="info-text text-label-gray info-private-key">{{privateKey}}</div>
                 </div>
                 <div class="wallet-address">
-                    <h4 class="info-title text-main-blue">Wallet address</h4>
+                    <h4 class="info-title text-main-blue">{{$(nsShowWallet.address)}}</h4>
                     <div class="info-text text-label-gray info-wallet-address">{{address}}</div>
                 </div>
             </div>
             <div class="setup-button nkn-after-clear">
-                <button class="nkn-normal-btn" type="button" @click="signIn">Sign in</button>
-                <button class="nkn-normal-btn" type="button" @click="downloadWallet">Download wallet</button>
+                <button class="nkn-normal-btn" type="button" @click="signIn">{{$(nsShowWallet.signInbtn)}}</button>
+                <button class="nkn-normal-btn" type="button" @click="downloadWallet">{{$(nsShowWallet.downloadbtn)}}</button>
             </div>
         </div>
         <div class="nkn-setup-page-wallpaper">

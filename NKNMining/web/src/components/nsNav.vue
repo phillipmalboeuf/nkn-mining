@@ -13,9 +13,9 @@
             </div>
             <div class="nkn-nav-menu dropdown-menu">
                 <button class="dropdown-item" type="button"
-                        @click="signOut()">Sign out</button>
+                        @click="signOut()">{{$t("nsNav.signOut")}}</button>
                 <button class="dropdown-item" type="button"
-                        @click="resetNodeShell()">Reset Node shell</button>
+                        @click="resetNodeShell()">{{$t("nsNav.resetNodeShell")}}</button>
             </div>
 
             <!--<div class="nkn-lang-sel"-->

@@ -1,7 +1,9 @@
 <template>
     <footer class="nkn-footer">
-        <div class="nkn-copyright">Copyright &copy; 2017-2018 NKN    |    All rights reserved</div>
-        <div class="nkn-attention">This software is in the early development stage and may not have all functions working properly. It should be used only for testing now. </div>
+        <i18n path="nsFooter.copyright" tag="div" class="nkn-copyright" >
+            <span place="i">&copy;</span>
+        </i18n>
+        <div class="nkn-attention">{{$t("nsFooter.attention")}}</div>
     </footer>
 </template>
 

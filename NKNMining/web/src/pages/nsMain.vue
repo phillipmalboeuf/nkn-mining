@@ -2,42 +2,42 @@
     <div class="nkn-main-page nkn-after-clear">
         <div class="operation-panel nkn-after-clear">
             <div class="operation-connect-status nkn-card-shadow nkn-after-clear">
-                <div class="operation-title">Node connect</div>
-                <div v-if="this.$store.state.global.nodeRunning" class="switch-button switch-on" @click="stopMining"><img src="../assets/img/icon/switch-on.png"/><span>on</span></div>
-                <div v-else class="switch-button" @click="startMining"><img src="../assets/img/icon/switch-off.png"/><span>off</span></div>
+                <div class="operation-title">{{$t("nsMain.node.title")}}</div>
+                <div v-if="this.$store.state.global.nodeRunning" class="switch-button switch-on" @click="stopMining"><img src="../assets/img/icon/switch-on.png"/><span>{{$t("nsMain.node.on")}}</span></div>
+                <div v-else class="switch-button" @click="startMining"><img src="../assets/img/icon/switch-off.png"/><span>{{$t("nsMain.node.off")}}</span></div>
 
                 <div class="node-info">{{nodeStatus}}</div>
 
                 <div class="node-info">{{version}}</div>
-                <div class="node-info">NKN network block height: {{this.nknHeight}}</div>
-                <div class="node-info">my block height: {{this.currentHeight}}</div>
+                <div class="node-info">{{$t("nsMain.node.NKNBlockHeight")}} {{this.nknHeight}}</div>
+                <div class="node-info">{{$t("nsMain.node.myBlockHeight")}} {{this.currentHeight}}</div>
             </div>
 
             <div class="operation-wallet nkn-card-shadow nkn-after-clear">
-                <div class="operation-title">Wallet</div>
-                <div class="wallet-operation-button" @click="downloadWallet"><button>download</button></div>
-                <div class="wallet-operation-button" @click="showTransferDlg"><button>transfer</button></div>
+                <div class="operation-title">{{$t("nsMain.wallet.title")}}</div>
+                <div class="wallet-operation-button" @click="downloadWallet"><button>{{$t("nsMain.wallet.downloadbtn")}}</button></div>
+                <div class="wallet-operation-button" @click="showTransferDlg"><button>{{$t("nsMain.wallet.transferbtn")}}</button></div>
                 <div class="wallet-info-panel">
                     <div class="wallet-address">
-                        <label class="info-title">Address</label>
+                        <label class="info-title">{{$t("nsMain.wallet.addressLabel")}}</label>
                         <div class="info-text text-main-blue">{{walletAddress}}</div>
                     </div>
                     <div class="wallet-balance">
-                        <label class="info-title">Balance</label>
+                        <label class="info-title">{{$t("nsMain.wallet.balanceLabel")}}</label>
                         <div class="info-text text-main-blue">
-                            <span>{{balance}}</span><span class="balance-unit">NKN</span>
+                            <span>{{balance}}</span><span class="balance-unit">{{$t("nsMain.wallet.balanceUnit")}}</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="info-neighbor-panel nkn-card-shadow nkn-after-clear">
-                <div class="operation-title">Neighbors</div>
+                <div class="operation-title">{{$t("nsMain.neighbors.title")}}</div>
                 <div class="neighbor-list-header">
                     <div class="neighbor-list-row">
-                        <div class="neighbor-list-cell id-cell">ID</div>
-                        <div class="neighbor-list-cell ip-cell">IP</div>
-                        <div class="neighbor-list-cell port-cell">Port</div>
+                        <div class="neighbor-list-cell id-cell">{{$t("nsMain.neighbors.ID")}}</div>
+                        <div class="neighbor-list-cell ip-cell">{{$t("nsMain.neighbors.IP")}}</div>
+                        <div class="neighbor-list-cell port-cell">{{$t("nsMain.neighbors.port")}}</div>
                     </div>
                 </div>
 
@@ -52,13 +52,13 @@
             </div>
         </div>
         <div class="transfer-list nkn-card-shadow">
-            <div class="transfer-list-title">Your latest mining rewards</div>
+            <div class="transfer-list-title">{{$t("nsMain.rewards.title")}}</div>
             <div class="transfer-list-header nkn-after-clear">
-                <div class="list-cell cell-tx">Transaction</div>
+                <div class="list-cell cell-tx">{{$t("nsMain.rewards.transaction")}}</div>
                 <!--<div class="list-cell cell-type">Type</div>-->
-                <div class="list-cell cell-value">Value</div>
-                <div class="list-cell cell-height">Height</div>
-                <div class="list-cell cell-time">Time</div>
+                <div class="list-cell cell-value">{{$t("nsMain.rewards.value")}}</div>
+                <div class="list-cell cell-height">{{$t("nsMain.rewards.height")}}</div>
+                <div class="list-cell cell-time">{{$t("nsMain.rewards.time")}}</div>
             </div>
 
             <div class="transfer-list-body nkn-after-clear">
@@ -67,9 +67,9 @@
                      :class="(1 === (i+1) % 2) ? 'transfer-gray-row':''"
                      :key="i"
                      >
-                    <div class="list-cell cell-tx":title="v.Hash">{{v.Hash}}</div>
+                    <div class="list-cell cell-tx" :title="v.Hash">{{v.Hash}}</div>
                     <!--<div class="list-cell cell-type">Mining reward</div>-->
-                    <div class="list-cell cell-value">{{v.Value}}&nbsp;NKN</div>
+                    <div class="list-cell cell-value">{{v.Value}}&nbsp;{{$t("nsMain.wallet.balanceUnit")}}</div>
                     <div class="list-cell cell-height">{{v.Height}}</div>
                     <div class="list-cell cell-time">{{v.Timestamp}}</div>
                 </div>
@@ -83,24 +83,24 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Transfer NKN</h5>
+                        <h5 class="modal-title">{{$t("nsMain.transfer.title")}}</h5>
                     </div>
                     <div class="modal-body">
                         <div class="input-group input-group-lg">
-                            <input id="transfer-to-address" type="text" class="form-control" placeholder="target address">
+                            <input id="transfer-to-address" type="text" class="form-control" :placeholder="$t('nsMain.transfer.addressPlaceholder')">
                         </div>
 
                         <div class="input-group input-group-lg">
-                            <input id="transfer-to-value" type="number" class="form-control" placeholder="how much NKN to transfer">
+                            <input id="transfer-to-value" type="number" class="form-control" :placeholder="$t('nsMain.transfer.countPlaceholder')">
                         </div>
 
                         <div class="input-group input-group-lg">
-                            <input id="transfer-to-wallet-password" type="password" class="form-control" placeholder="wallet password">
+                            <input id="transfer-to-wallet-password" type="password" class="form-control" :placeholder="$t('nsMain.transfer.passwordPlaceholder')">
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-danger" @click="doTransfer">Transfer</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{$t("nsMain.transfer.cancel")}}</button>
+                        <button type="button" class="btn btn-danger" @click="doTransfer">{{$t("nsMain.transfer.confirm")}}</button>
                     </div>
                 </div>
             </div>
@@ -111,20 +111,20 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Reset shell confirm</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">{{$t("nsMain.resetdlg.title")}}</h5>
                     </div>
                     <div class="modal-body">
                         <div class="reset-shell-warning">
-                            Warning: This operation will reset all your NKN data, include your Wallet!
+                            {{$t("nsMain.resetdlg.warning")}}
                         </div>
 
                         <div class="input-group input-group-lg">
-                            <input id="reset-shell-confirm-password" type="password" class="form-control" placeholder="Account password">
+                            <input id="reset-shell-confirm-password" type="password" class="form-control" :placeholder="$t('nsMain.resetdlg.passwordPlaceholder')">
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" @click="resetShell">Reset</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{$t("nsMain.resetdlg.cancel")}}</button>
+                        <button type="button" class="btn btn-primary" @click="resetShell">{{$t("nsMain.resetdlg.reset")}}</button>
                     </div>
                 </div>
             </div>
@@ -163,9 +163,9 @@
 
       if(data.Data.shellStatus !== serverStatus.NS_STATUS_NODE_RUNNING()) {
         if(data.Data.shellStatus === serverStatus.NS_STATUS_UPDATE_BIN()) {
-          this.nodeStatus = "Node status: node updating"
+          this.nodeStatus = this.$t('nsMain.node.nodeStatus.updating')
         } else {
-          this.nodeStatus = "Node status: stopped"
+          this.nodeStatus = this.$t('nsMain.node.nodeStatus.stoped')
         }
 
         this.shellStatus = data.Data.shellStatus
@@ -179,19 +179,19 @@
       scope.$store.commit(nsNamespace.GLOBAL + "/updateNodeRunning", true)
       switch(data.Data.syncStatus) {
         case "SyncStarted":
-          scope.nodeStatus = "Node status: syncing"
+          scope.nodeStatus = this.$t('nsMain.node.nodeStatus.syncing')
           break
 
         case "SyncFinished":
-          scope.nodeStatus = "Node status: persisting"
+          scope.nodeStatus = this.$t('nsMain.node.nodeStatus.persisting')
           break
 
         case "PersistFinished":
-          scope.nodeStatus = "Node status: mining"
+          scope.nodeStatus = this.$t('nsMain.node.nodeStatus.mining')
           break
 
         default:
-          scope.nodeStatus = "Node status: syncing"
+          scope.nodeStatus = this.$t('nsMain.node.nodeStatus.syncing')
           break
       }
 
@@ -199,7 +199,7 @@
         loopStatusQuery(scope)
       }, 5000)
     }, function (e) {
-      scope.nodeStatus = "Node status: syncing"
+      scope.nodeStatus = this.$t('nsMain.node.nodeStatus.syncing')
       setTimeout(function () {
         loopStatusQuery(scope)
       }, 5000)
@@ -254,10 +254,10 @@
     data: function () {
       return {
         walletAddress: "",
-        balance: "Querying balance ...",
+        balance: this.$t('nsMain.wallet.balance.init'),
         accountInfo: NSLocalStorage.getAccount(),
-        version: "Querying version ...",
-        nodeStatus: "Node status: sync ...",
+        version: this.$t('nsMain.node.version.init'),
+        nodeStatus: this.$t('nsMain.node.nodeStatus.init'),
         miningRewards: [],
         nodeInfo: {},
         neighbor: [],
@@ -307,9 +307,10 @@
           })
         }, function (err) {
           if(err.msg) {
-            alert(err.msg)
+            // alert(err.msg)
+            alert(this.$t('nsMain.transfer.alertInfo.default'))
           } else {
-            alert("transfer failed!")
+            alert(this.$t('nsMain.transfer.alertInfo.default'))
           }
 
           _this.$store.commit(nsNamespace.GLOBAL + "/updatePageLoaded", true)
@@ -327,14 +328,14 @@
 
         if(confirmPassword !== account.accountKey) {
           $("#reset-confirm-model").modal('hide')
-          alert('wrong password!')
+          alert(this.$t('nsMain.resetdlg.alertInfo.wrongPass'))
           return
         }
 
         Http.resetShell(this, account.requestKey, function () {
           window.location.reload()
         }, function () {
-          alert('reset node shell success')
+          alert(this.$t('nsMain.resetdlg.alertInfo.success'))
         })
       },
       downloadWallet() {
@@ -344,10 +345,10 @@
 
       startMining() {
         if(serverStatus.NS_STATUS_UPDATE_BIN() === this.shellStatus) {
-          alert("you can't mining when node updating.")
+          alert(this.$t('nsMain.node.mining.error'))
           return
         }
-        this.nodeStatus = "starting"
+        this.nodeStatus = this.$t('nsMain.node.nodeStatus.starting')
         this.$store.commit(nsNamespace.GLOBAL + "/updatePageLoaded", false)
 
         let _this = this
@@ -360,13 +361,13 @@
 
           },
           function () {
-            alert("start mining failed. please check log on the server.")
+            alert(this.$t('nsMain.node.mining.fail'))
             this.$store.commit(nsNamespace.GLOBAL + "/updatePageLoaded", true)
           })
       },
 
       stopMining() {
-        this.nodeStatus = "stopping"
+        this.nodeStatus = this.$t('nsMain.node.nodeStatus.stopping')
         this.$store.commit(nsNamespace.GLOBAL + "/updatePageLoaded", false)
 
         let _this = this
@@ -379,7 +380,7 @@
 
           },
           function () {
-            alert("stop mining failed. please check log on the server.")
+            alert(this.$t('nsMain.node.mining.stopfail'))
             this.$store.commit(nsNamespace.GLOBAL + "/updatePageLoaded", true)
           })
       },

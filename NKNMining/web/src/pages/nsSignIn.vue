@@ -1,11 +1,11 @@
 <template>
     <div class="ns-create-account nkn-card-shadow nkn-after-clear">
         <div class="nkn-sign-in-panel">
-            <label class="nkn-page-title-label">Welcome to</label>
-            <h1 class="nkn-page-title text-main-blue">NKN NODE</h1>
+            <label class="nkn-page-title-label">{{$t("nsSignIn.titleLabel")}}</label>
+            <h1 class="nkn-page-title text-main-blue">{{$t("nsSignIn.title")}}</h1>
             <ns-input-item v-for="(inputItem, idx) in inputs" :key="idx" :config="inputItem" />
             <div class="nkn-sign-in">
-                <button class="nkn-normal-btn sign-in-button" type="button" @click="signIn">Sign in</button>
+                <button class="nkn-normal-btn sign-in-button" type="button" @click="signIn">{{$t("nsSignIn.signInbtn")}}</button>
             </div>
         </div>
         <div class="nkn-setup-page-wallpaper">
@@ -67,12 +67,12 @@
 
         if(!Is.alphaNumeric(accountInfo.account)) {
           verifyFailed = true
-          this.inputs.account.errorInfo = 'Alphanumeric only!'
+          this.inputs.account.errorInfo = this.$t('nsSignIn.nsInput.account.errorInfo')
         }
 
         if(accountInfo.password.length < 8) {
           verifyFailed = true
-          this.inputs.password.errorInfo = 'Please input 8-20 characters'
+          this.inputs.password.errorInfo = this.$t('nsSignIn.nsInput.password.errorInfo')
         }
 
         return verifyFailed ? null : accountInfo
@@ -123,7 +123,7 @@
             this.$router.push({name: nsNamespace.MAIN})
           },
           function () {
-            alert("login failed!")
+            alert(this.$t('nsSignIn.nsInput.loginfail'))
           }
         )
       }
@@ -133,8 +133,8 @@
         inputs: {
           account: {
             inputId: inputIdPrefix() + "account",
-            title: 'Account',
-            placeholder: 'Your NKN shell account',
+            title: this.$t('nsSignIn.nsInput.account.title'),
+            placeholder: this.$t('nsSignIn.nsInput.account.placeholder'),
             hasAppend: false,
             inputType: 'text',
             maxSize: 20,
@@ -143,8 +143,8 @@
 
           password: {
             inputId: inputIdPrefix() + "password",
-            title: 'Your account password',
-            placeholder: '8-20 characters',
+            title: this.$t('nsSignIn.nsInput.password.title'),
+            placeholder: this.$t('nsSignIn.nsInput.password.placeholder'),
             hasAppend: true,
             inputType: 'password',
             maxSize: 20,

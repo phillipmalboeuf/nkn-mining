@@ -1,16 +1,16 @@
 <template>
     <div class="nkn-setup-page nkn-card-shadow nkn-after-clear">
         <div class="nkn-create-account-panel">
-            <label class="nkn-page-title-label">setup - step 2</label>
-            <h1 class="nkn-page-title text-main-blue">Load wallet</h1>
+            <label class="nkn-page-title-label">{{$t("nsLoadWallet.titleLabel")}}</label>
+            <h1 class="nkn-page-title text-main-blue">{{$t("nsLoadWallet.title")}}</h1>
             <ns-input-item v-for="(inputItem, idx) in inputs" :key="idx" :config="inputItem" />
-            <div class="nkn-wallet-select-button">Select file</div>
+            <div class="nkn-wallet-select-button">{{$t("nsLoadWallet.upload")}}</div>
             <input class="nkn-wallet-to-load-file-input" type="file" accept=".dat"
                    @change="walletSelected"/>
 
             <div class="setup-button nkn-after-clear nkn-wallet-setup-button-panel">
-                <a class="nkn-link-gen-wallet" @click="toGenWallet">Generate wallet</a>
-                <button class="nkn-normal-btn" type="button" @click="nextStep">NEXT</button>
+                <a class="nkn-link-gen-wallet" @click="toGenWallet">{{$t("nsLoadWallet.link")}}</a>
+                <button class="nkn-normal-btn" type="button" @click="nextStep">{{$t("nsLoadWallet.nextStepbtn")}}</button>
             </div>
         </div>
         <div class="nkn-setup-page-wallpaper">

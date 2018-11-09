@@ -1,11 +1,11 @@
 <template>
     <div class="nkn-setup-page nkn-card-shadow nkn-after-clear">
         <div class="nkn-create-account-panel">
-            <label class="nkn-page-title-label">setup - step 1</label>
-            <h1 class="nkn-page-title text-main-blue">Create account</h1>
+            <label class="nkn-page-title-label">{{$t("nsCreateAccount.titleLabel")}}</label>
+            <h1 class="nkn-page-title text-main-blue">{{$t("nsCreateAccount.title")}}</h1>
             <ns-input-item v-for="(inputItem, idx) in inputs" :key="idx" :config="inputItem" />
             <div class="setup-button nkn-after-clear">
-                <button class="nkn-normal-btn" type="button" @click="nextStep">NEXT</button>
+                <button class="nkn-normal-btn" type="button" @click="nextStep">{{$t("nsCreateAccount.nextStepbtn")}}</button>
             </div>
         </div>
         <div class="nkn-setup-page-wallpaper">
