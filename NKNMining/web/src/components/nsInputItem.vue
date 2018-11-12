@@ -5,7 +5,7 @@
             <input class="form-control"
                    :maxlength="config.maxSize ? config.maxSize:-1"
                    :type="config.inputType"
-                   :class="this.config.inputId"
+                   :class="config.inputId"
                    :placeholder="config.placeholder">
             <div v-if="config.hasAppend" class="input-group-append">
                 <span class="input-group-text" @click="switchInputType">
@@ -30,6 +30,9 @@
     computed: {
       openEyeToShow() {
         return ('text' === this.config.inputType)
+      },
+      locale() {
+        return this.$store.state.global.language
       }
     }
   }

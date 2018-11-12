@@ -4,32 +4,34 @@
             <div class="nkn-logo" @click="goHome">
                 <img src="../assets/img/icon/logo.png"/>
             </div>
-
-            <div v-if="showUserIcon" class="nkn-user"
-                 data-toggle="dropdown"
-                 aria-haspopup="true"
-                 aria-expanded="false">
-                <img src="../assets/img/icon/userhead.png"/>
+            <div class="nav-bar-dropdown">
+                <div v-if="showUserIcon" class="nkn-user"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false">
+                    <img src="../assets/img/icon/userhead.png"/>
+                </div>
+                <div class="nkn-nav-menu dropdown-menu">
+                    <button class="dropdown-item" type="button"
+                            @click="signOut()">{{$t("nsNav.signOut")}}</button>
+                    <button class="dropdown-item" type="button"
+                            @click="resetNodeShell()">{{$t("nsNav.resetNodeMining")}}</button>
+                </div>
             </div>
-            <div class="nkn-nav-menu dropdown-menu">
-                <button class="dropdown-item" type="button"
-                        @click="signOut()">Sign out</button>
-                <button class="dropdown-item" type="button"
-                        @click="resetNodeShell()">Reset Node shell</button>
+            <div class="nav-bar-dropdown">
+                <div class="nkn-lang-sel"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false">
+                    <img src="../assets/img/icon/language.png"/><span class="text-main-blue ">{{$t('nav.langSel')}}</span>
+                </div>
+                <div class="nkn-nav-lang-sel-menu dropdown-menu">
+                    <button class="dropdown-item" type="button"
+                            @click="changeLanguage('en')">{{$t('nav.langList.en')}}</button>
+                    <button class="dropdown-item" type="button"
+                            @click="changeLanguage('zh')">{{$t('nav.langList.zh')}}</button>
+                </div>
             </div>
-
-            <!--<div class="nkn-lang-sel"-->
-               <!--data-toggle="dropdown"-->
-               <!--aria-haspopup="true"-->
-               <!--aria-expanded="false">-->
-                <!--<img src="../assets/img/icon/language.png"/><span class="text-main-blue ">{{$t('nav.langSel')}}</span>-->
-            <!--</div>-->
-            <!--<div class="nkn-nav-lang-sel-menu dropdown-menu">-->
-                <!--<button class="dropdown-item" type="button"-->
-                        <!--@click="changeLanguage('en')">{{$t('nav.langList.en')}}</button>-->
-                <!--<button class="dropdown-item" type="button"-->
-                        <!--@click="changeLanguage('zh')">{{$t('nav.langList.zh')}}</button>-->
-            <!--</div>-->
         </div>
     </nav>
 </template>
@@ -63,6 +65,13 @@
 
       goHome() {
         this.$router.push("/")
+      },
+
+      changeLanguage(lang) {
+        if(this.$i18n.locale === lang) return 
+        this.$i18n.locale = lang
+        this.$store.commit(nsNamespace.GLOBAL+'/updateLanguage',lang)
+        NSLocalStorage.setLanguage(lang)
       }
     },
   }
@@ -94,16 +103,24 @@
         height: 30px;
     }
 
-    .nkn-user {
+    .nkn-user, .nkn-lang-sel {
         float: right;
         font-size: 20px;
         cursor: pointer;
     }
 
-    .nkn-user > img {
+    .nkn-user > img, .nkn-lang-sel > img {
         height: 20px;
         padding-right: 10px;
         margin-top: -4px;
+    }
+
+    .text-main-blue {
+        padding-right: 10px;
+    }
+
+    .nkn-nav-lang-sel-menu {
+        text-align: center;
     }
 </style>
 
@@ -113,7 +130,6 @@
     }
 
     .dropdown-item {
-        height: 40px;
         line-height: 40px;
     }
 </style>

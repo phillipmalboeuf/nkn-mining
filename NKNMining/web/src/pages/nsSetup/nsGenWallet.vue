@@ -1,12 +1,12 @@
 <template>
     <div class="nkn-setup-page nkn-card-shadow nkn-after-clear">
         <div class="nkn-create-account-panel">
-            <label class="nkn-page-title-label">setup - step 2</label>
-            <h1 class="nkn-page-title text-main-blue">Generate wallet</h1>
+            <label class="nkn-page-title-label">{{$t("nsGenWallet.titleLabel")}}</label>
+            <h1 class="nkn-page-title text-main-blue">{{$t("nsGenWallet.title")}}</h1>
             <ns-input-item v-for="(inputItem, idx) in inputs" :key="idx" :config="inputItem" />
             <div class="setup-button nkn-after-clear nkn-wallet-setup-button-panel">
-                <a class="nkn-link-load-wallet" @click="toLoadWallet">Load wallet</a>
-                <button class="nkn-normal-btn" type="button" @click="nextStep">NEXT</button>
+                <a class="nkn-link-load-wallet" @click="toLoadWallet">{{$t("nsGenWallet.link")}}</a>
+                <button class="nkn-normal-btn" type="button" @click="nextStep">{{$t("nsGenWallet.nextStepbtn")}}</button>
             </div>
         </div>
         <div class="nkn-setup-page-wallpaper">
@@ -26,12 +26,14 @@
   import NsLoading from "../../components/nsLoading";
   import {inputIdPrefix} from "../../js/nsConst"
   import {loadPage} from "../../js/nsLoading";
+  import LangMix from "../../js/mixin/lang.js"
 
   export default {
     components: {
       NsLoading,
       NsInputItem
     },
+    mixins:[LangMix],
     name: "ns-gen-wallet",
     mounted() {
       loadPage.call(this)
@@ -41,8 +43,8 @@
         inputs: {
           password: {
             inputId: inputIdPrefix() + "password",
-            title: 'Wallet password',
-            placeholder: '8-20 characters',
+            title: this.$t('nsInput.password.title'),
+            placeholder: this.$t('nsInput.password.placeholder'),
             hasAppend: true,
             inputType: 'password',
             maxSize: 20,
@@ -51,8 +53,8 @@
 
           rePassword: {
             inputId: inputIdPrefix() + "rePassword",
-            title: 'Confirm wallet password',
-            placeholder: '8-20 characters',
+            title: this.$t('nsInput.rePassword.title'),
+            placeholder: this.$t('nsInput.rePassword.placeholder'),
             hasAppend: true,
             inputType: 'password',
             maxSize: 20,
@@ -80,13 +82,13 @@
 
         if(walletPassword.password.length < 8) {
           verifyFailed = true
-          this.inputs.password.errorInfo = 'Please input 8-20 characters'
+          this.inputs.password.errorInfo = this.$t('nsInput.password.errorInfo')
         }
 
         if(walletPassword.password !== walletPassword.rePassword) {
           verifyFailed = true
           this.inputs.password.errorInfo = ''
-          this.inputs.rePassword.errorInfo = 'The password for the two input is inconsistent!'
+          this.inputs.rePassword.errorInfo = this.$t('nsInput.rePassword.errorInfo')
         }
 
         if(verifyFailed) {
@@ -125,6 +127,31 @@
         }, function (err) {
           console.error(err)
         })
+      }
+    },
+    watch: {
+      lang() {
+        this.inputs = {
+          password: {
+            inputId: inputIdPrefix() + "password",
+            title: this.$t('nsInput.password.title'),
+            placeholder: this.$t('nsInput.password.placeholder'),
+            hasAppend: true,
+            inputType: 'password',
+            maxSize: 20,
+            errorInfo: '',
+          },
+
+          rePassword: {
+            inputId: inputIdPrefix() + "rePassword",
+            title: this.$t('nsInput.rePassword.title'),
+            placeholder: this.$t('nsInput.rePassword.placeholder'),
+            hasAppend: true,
+            inputType: 'password',
+            maxSize: 20,
+            errorInfo: '',
+          }
+        }
       }
     }
   }

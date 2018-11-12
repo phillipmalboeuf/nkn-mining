@@ -1,11 +1,11 @@
 <template>
     <div class="ns-create-account nkn-card-shadow nkn-after-clear">
         <div class="nkn-sign-in-panel">
-            <label class="nkn-page-title-label">Welcome to</label>
-            <h1 class="nkn-page-title text-main-blue">NKN NODE</h1>
-            <ns-input-item v-for="(inputItem, idx) in inputs" :key="idx" :config="inputItem" />
+            <label class="nkn-page-title-label">{{$t("nsSignIn.titleLabel")}}</label>
+            <h1 class="nkn-page-title text-main-blue">{{$t("nsSignIn.title")}}</h1>
+            <ns-input-item  v-for="(inputItem, idx) in inputs" :key="idx" :config="inputItem" />
             <div class="nkn-sign-in">
-                <button class="nkn-normal-btn sign-in-button" type="button" @click="signIn">Sign in</button>
+                <button class="nkn-normal-btn sign-in-button" type="button" @click="signIn">{{$t("nsSignIn.signInbtn")}}</button>
             </div>
         </div>
         <div class="nkn-setup-page-wallpaper">
@@ -24,6 +24,7 @@
   import Is from "is_js"
   import Mathjs from "mathjs"
   import Http from "../js/network/nsHttp"
+  import LangMix from "../js/mixin/lang.js"
   import {inputIdPrefix} from "../js/nsConst"
   import {nsNamespace} from "../js/nsNamespace"
   import {loadPage} from "../js/nsLoading"
@@ -33,6 +34,7 @@
       NsLoading,
       NsInputItem
     },
+    mixins:[LangMix],
     name: "ns-sign-in",
     mounted() {
       if(NSLocalStorage.checkLogin()) {
@@ -67,12 +69,12 @@
 
         if(!Is.alphaNumeric(accountInfo.account)) {
           verifyFailed = true
-          this.inputs.account.errorInfo = 'Alphanumeric only!'
+          this.inputs.account.errorInfo = this.$t('nsInput.account.errorInfo')
         }
 
         if(accountInfo.password.length < 8) {
           verifyFailed = true
-          this.inputs.password.errorInfo = 'Please input 8-20 characters'
+          this.inputs.password.errorInfo = this.$t('nsInput.password.errorInfo')
         }
 
         return verifyFailed ? null : accountInfo
@@ -123,7 +125,7 @@
             this.$router.push({name: nsNamespace.MAIN})
           },
           function () {
-            alert("login failed!")
+            alert(this.$t('nsSignIn.nsInput.loginfail'))
           }
         )
       }
@@ -133,23 +135,46 @@
         inputs: {
           account: {
             inputId: inputIdPrefix() + "account",
-            title: 'Account',
-            placeholder: 'Your NKN shell account',
+            title: this.$t('nsInput.account.title'),
+            placeholder: this.$t('nsInput.account.placeholder'),
             hasAppend: false,
             inputType: 'text',
             maxSize: 20,
             errorInfo: '',
           },
-
           password: {
             inputId: inputIdPrefix() + "password",
-            title: 'Your account password',
-            placeholder: '8-20 characters',
+            title: this.$t('nsInput.password.title'),
+            placeholder: this.$t('nsInput.password.placeholder'),
             hasAppend: true,
             inputType: 'password',
             maxSize: 20,
             errorInfo: '',
+          }
+        }
+      }
+    },
+    watch: {
+      lang(){
+        this.inputs = {
+          account: {
+            inputId: inputIdPrefix() + "account",
+            title: this.$t('nsInput.account.title'),
+            placeholder: this.$t('nsInput.account.placeholder'),
+            hasAppend: false,
+            inputType: 'text',
+            maxSize: 20,
+            errorInfo: '',
           },
+          password: {
+            inputId: inputIdPrefix() + "password",
+            title: this.$t('nsInput.password.title'),
+            placeholder: this.$t('nsInput.password.placeholder'),
+            hasAppend: true,
+            inputType: 'password',
+            maxSize: 20,
+            errorInfo: '',
+          }
         }
       }
     }

@@ -1,16 +1,16 @@
 <template>
     <div class="nkn-setup-page nkn-card-shadow nkn-after-clear">
         <div class="nkn-create-account-panel">
-            <label class="nkn-page-title-label">setup - step 2</label>
-            <h1 class="nkn-page-title text-main-blue">Load wallet</h1>
+            <label class="nkn-page-title-label">{{$t("nsLoadWallet.titleLabel")}}</label>
+            <h1 class="nkn-page-title text-main-blue">{{$t("nsLoadWallet.title")}}</h1>
             <ns-input-item v-for="(inputItem, idx) in inputs" :key="idx" :config="inputItem" />
-            <div class="nkn-wallet-select-button">Select file</div>
+            <div class="nkn-wallet-select-button">{{$t("nsLoadWallet.upload")}}</div>
             <input class="nkn-wallet-to-load-file-input" type="file" accept=".dat"
                    @change="walletSelected"/>
 
             <div class="setup-button nkn-after-clear nkn-wallet-setup-button-panel">
-                <a class="nkn-link-gen-wallet" @click="toGenWallet">Generate wallet</a>
-                <button class="nkn-normal-btn" type="button" @click="nextStep">NEXT</button>
+                <a class="nkn-link-gen-wallet" @click="toGenWallet">{{$t("nsLoadWallet.link")}}</a>
+                <button class="nkn-normal-btn" type="button" @click="nextStep">{{$t("nsLoadWallet.nextStepbtn")}}</button>
             </div>
         </div>
         <div class="nkn-setup-page-wallpaper">
@@ -31,12 +31,14 @@
   import NsLoading from "../../components/nsLoading";
   import {inputIdPrefix} from "../../js/nsConst"
   import {loadPage} from "../../js/nsLoading";
+  import LangMix from "../../js/mixin/lang.js"
 
   export default {
     components: {
       NsLoading,
       NsInputItem
     },
+    mixins:[LangMix],
     name: "ns-load-wallet",
     mounted() {
       loadPage.call(this)
@@ -69,8 +71,8 @@
         inputs: {
           wallet: {
             inputId: inputIdPrefix() + "wallet-to-load",
-            title: '&nbsp;',
-            placeholder: 'Wallet file to load',
+            title: this.$t('nsInput.wallet.title'),
+            placeholder: this.$t('nsInput.wallet.placeholder'),
             hasAppend: false,
             inputType: 'text',
             maxSize: 20,
@@ -79,8 +81,8 @@
 
           password: {
             inputId: inputIdPrefix() + "password",
-            title: 'Wallet password',
-            placeholder: 'password ot the wallet to load',
+            title: this.$t('nsInput.walletPassword.title'),
+            placeholder: this.$t('nsInput.walletPassword.placeholder'),
             hasAppend: false,
             inputType: 'password',
             maxSize: 20,
@@ -128,7 +130,7 @@
         let walletFile = $fileInput.get(0).files[0]
 
         if(!walletFile) {
-          this.inputs.password.errorInfo = 'please select a wallet file'
+          this.inputs.password.errorInfo = this.$t('nsInput.wallet.errorInfo')
           return
         }
 
@@ -143,7 +145,7 @@
           console.log(_this.walletJson)
           console.log(_this.wallet)
           if (_this.wallet instanceof nknWallet.nknWalletError) {
-            _this.inputs.password.errorInfo = 'Please check if the password matches the wallet.'
+            _this.inputs.password.errorInfo = this.$t('nsInput.walletPassword.errorInfo')
             return
           }
 
@@ -173,10 +175,35 @@
             _this.$router.push({name: nsNamespace.SETUP.SHOW_WALLET})
           }, function (err) {
             _this.blockUI = false
-            _this.inputs.password.errorInfo = 'Network error, please try again later.'
+            _this.inputs.password.errorInfo = this.$t('nsLoadWallet.netWorkError')
             console.error(err)
           })
         })
+      }
+    },
+    watch: {
+      lang () {
+        this.inputs = {
+          wallet: {
+            inputId: inputIdPrefix() + "wallet-to-load",
+            title: this.$t('nsInput.wallet.title'),
+            placeholder: this.$t('nsInput.wallet.placeholder'),
+            hasAppend: false,
+            inputType: 'text',
+            maxSize: 20,
+            errorInfo: '',
+          },
+
+          password: {
+            inputId: inputIdPrefix() + "password",
+            title: this.$t('nsInput.walletPassword.title'),
+            placeholder: this.$t('nsInput.walletPassword.placeholder'),
+            hasAppend: false,
+            inputType: 'password',
+            maxSize: 20,
+            errorInfo: '',
+          }
+        }
       }
     }
   }

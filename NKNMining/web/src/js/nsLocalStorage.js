@@ -6,6 +6,8 @@ const WALLET_KEY = 'wallet_key'
 const WALLET = 'wallet'
 const WALLET_ADDRESS = 'wallet_address'
 
+const LANG = 'lang'
+
 
 let setAccount = function (account, accountKey, reqKey, walletKey) {
   window.localStorage.setItem(ACCOUNT, account)
@@ -59,7 +61,8 @@ let checkClear = function () {
     null === window.localStorage.getItem(REQUEST_KEY) &&
     null === window.localStorage.getItem(WALLET_KEY) &&
     null === window.localStorage.getItem(WALLET) &&
-    null === window.localStorage.getItem(WALLET_ADDRESS)
+    null === window.localStorage.getItem(WALLET_ADDRESS) &&
+    null === window.localStorage.getItem(LANG)
   )
 }
 
@@ -77,6 +80,14 @@ let setLogin = function (account, wallet, address, keys) {
   setWallet(wallet, address)
 }
 
+let setLanguage = function (lang) {
+  window.localStorage.setItem(LANG, lang)
+}
+
+let getLanguage = function () {
+  return window.localStorage.getItem(LANG)
+}
+
 
 export default {
   setAccount,
@@ -85,6 +96,9 @@ export default {
   setWallet,
   getWallet,
   getWalletAddress,
+
+  setLanguage,
+  getLanguage,
 
   clear,
   logout,
