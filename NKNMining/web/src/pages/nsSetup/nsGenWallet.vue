@@ -26,12 +26,14 @@
   import NsLoading from "../../components/nsLoading";
   import {inputIdPrefix} from "../../js/nsConst"
   import {loadPage} from "../../js/nsLoading";
+  import LangMix from "../../js/mixin/lang.js"
 
   export default {
     components: {
       NsLoading,
       NsInputItem
     },
+    mixins:[LangMix],
     name: "ns-gen-wallet",
     mounted() {
       loadPage.call(this)
@@ -125,6 +127,31 @@
         }, function (err) {
           console.error(err)
         })
+      }
+    },
+    watch: {
+      lang() {
+        this.inputs = {
+          password: {
+            inputId: inputIdPrefix() + "password",
+            title: this.$t('nsInput.password.title'),
+            placeholder: this.$t('nsInput.password.placeholder'),
+            hasAppend: true,
+            inputType: 'password',
+            maxSize: 20,
+            errorInfo: '',
+          },
+
+          rePassword: {
+            inputId: inputIdPrefix() + "rePassword",
+            title: this.$t('nsInput.rePassword.title'),
+            placeholder: this.$t('nsInput.rePassword.placeholder'),
+            hasAppend: true,
+            inputType: 'password',
+            maxSize: 20,
+            errorInfo: '',
+          }
+        }
       }
     }
   }

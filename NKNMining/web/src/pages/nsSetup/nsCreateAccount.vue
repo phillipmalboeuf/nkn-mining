@@ -23,14 +23,16 @@
   import Crypto from "../../js/crypto/algorithm"
   import {inputIdPrefix} from "../../js/nsConst"
   import NSLocalStroage from "../../js/nsLocalStorage"
-  import NsLoading from "../../components/nsLoading";
-  import {loadPage} from "../../js/nsLoading";
+  import NsLoading from "../../components/nsLoading"
+  import LangMix from "../../js/mixin/lang.js"
+  import {loadPage} from "../../js/nsLoading"
 
   export default {
     components: {
       NsLoading,
       NsInputItem
     },
+    mixins:[LangMix],
     name: "ns-setup-create-accounts",
     mounted() {
       loadPage.call(this)
@@ -142,6 +144,50 @@
         }, function (err) {
           alert(err.response.data)
         })
+      }
+    },
+    watch: {
+      lang () {
+        this.inputs = {
+           account: {
+            inputId: inputIdPrefix() + "account",
+            title: this.$t('nsInput.account.title'),
+            placeholder: this.$t('nsInput.account.placeholder'),
+            hasAppend: false,
+            inputType: 'text',
+            maxSize: 20,
+            errorInfo: '',
+          },
+
+          password: {
+            inputId: inputIdPrefix() + "password",
+            title: this.$t('nsInput.password.title'),
+            placeholder: this.$t('nsInput.password.placeholder'),
+            hasAppend: true,
+            inputType: 'password',
+            maxSize: 20,
+            errorInfo: '',
+          },
+
+          rePassword: {
+            inputId: inputIdPrefix() + "rePassword",
+            title: this.$t('nsInput.rePassword.title'),
+            placeholder: this.$t('nsInput.rePassword.placeholder'),
+            hasAppend: true,
+            inputType: 'password',
+            maxSize: 20,
+            errorInfo: '',
+          },
+
+          sn: {
+            inputId: inputIdPrefix() + "sn",
+            title: this.$t('nsInput.sn.title'),
+            placeholder: this.$t('nsInput.sn.placeholder'),
+            hasAppend: false,
+            inputType: 'text',
+            errorInfo: '',
+          },
+        }
       }
     }
   }

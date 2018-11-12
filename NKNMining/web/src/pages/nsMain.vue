@@ -179,19 +179,19 @@
       scope.$store.commit(nsNamespace.GLOBAL + "/updateNodeRunning", true)
       switch(data.Data.syncStatus) {
         case "SyncStarted":
-          scope.nodeStatus = this.$t('nsMain.node.nodeStatus.syncing')
+          scope.nodeStatus = scope.$t('nsMain.node.nodeStatus.syncing')
           break
 
         case "SyncFinished":
-          scope.nodeStatus = this.$t('nsMain.node.nodeStatus.persisting')
+          scope.nodeStatus = scope.$t('nsMain.node.nodeStatus.persisting')
           break
 
         case "PersistFinished":
-          scope.nodeStatus = this.$t('nsMain.node.nodeStatus.mining')
+          scope.nodeStatus = scope.$t('nsMain.node.nodeStatus.mining')
           break
 
         default:
-          scope.nodeStatus = this.$t('nsMain.node.nodeStatus.syncing')
+          scope.nodeStatus = scope.$t('nsMain.node.nodeStatus.syncing')
           break
       }
 
@@ -199,10 +199,12 @@
         loopStatusQuery(scope)
       }, 5000)
     }, function (e) {
-      scope.nodeStatus = this.$t('nsMain.node.nodeStatus.syncing')
-      setTimeout(function () {
+      try{
+        scope.nodeStatus = scope.$t('nsMain.node.nodeStatus.syncing')
+        setTimeout(function () {
         loopStatusQuery(scope)
       }, 5000)
+      }catch(e){}
     })
   }
 

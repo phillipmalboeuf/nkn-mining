@@ -31,12 +31,14 @@
   import NsLoading from "../../components/nsLoading";
   import {inputIdPrefix} from "../../js/nsConst"
   import {loadPage} from "../../js/nsLoading";
+  import LangMix from "../../js/mixin/lang.js"
 
   export default {
     components: {
       NsLoading,
       NsInputItem
     },
+    mixins:[LangMix],
     name: "ns-load-wallet",
     mounted() {
       loadPage.call(this)
@@ -177,6 +179,31 @@
             console.error(err)
           })
         })
+      }
+    },
+    watch: {
+      lang () {
+        this.inputs = {
+          wallet: {
+            inputId: inputIdPrefix() + "wallet-to-load",
+            title: this.$t('nsInput.wallet.title'),
+            placeholder: this.$t('nsInput.wallet.placeholder'),
+            hasAppend: false,
+            inputType: 'text',
+            maxSize: 20,
+            errorInfo: '',
+          },
+
+          password: {
+            inputId: inputIdPrefix() + "password",
+            title: this.$t('nsInput.walletPassword.title'),
+            placeholder: this.$t('nsInput.walletPassword.placeholder'),
+            hasAppend: false,
+            inputType: 'password',
+            maxSize: 20,
+            errorInfo: '',
+          }
+        }
       }
     }
   }

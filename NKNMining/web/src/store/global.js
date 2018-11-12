@@ -5,6 +5,7 @@ export default {
     wallet: null,
     nodeRunning: false,
     nodeSyncState: null,
+    language: 'en'
   },
 
   mutations: {
@@ -22,5 +23,8 @@ export default {
     updateWallet(state, wallet) {
       state.wallet = wallet
     },
+    updateLanguage(state, lang) {
+      state.language = lang
+    }
   }
 }

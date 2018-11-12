@@ -3,7 +3,7 @@
         <div class="nkn-sign-in-panel">
             <label class="nkn-page-title-label">{{$t("nsSignIn.titleLabel")}}</label>
             <h1 class="nkn-page-title text-main-blue">{{$t("nsSignIn.title")}}</h1>
-            <ns-input-item v-for="(inputItem, idx) in inputs" :key="idx" :config="inputItem" />
+            <ns-input-item  v-for="(inputItem, idx) in inputs" :key="idx" :config="inputItem" />
             <div class="nkn-sign-in">
                 <button class="nkn-normal-btn sign-in-button" type="button" @click="signIn">{{$t("nsSignIn.signInbtn")}}</button>
             </div>
@@ -24,6 +24,7 @@
   import Is from "is_js"
   import Mathjs from "mathjs"
   import Http from "../js/network/nsHttp"
+  import LangMix from "../js/mixin/lang.js"
   import {inputIdPrefix} from "../js/nsConst"
   import {nsNamespace} from "../js/nsNamespace"
   import {loadPage} from "../js/nsLoading"
@@ -33,6 +34,7 @@
       NsLoading,
       NsInputItem
     },
+    mixins:[LangMix],
     name: "ns-sign-in",
     mounted() {
       if(NSLocalStorage.checkLogin()) {
@@ -140,7 +142,6 @@
             maxSize: 20,
             errorInfo: '',
           },
-
           password: {
             inputId: inputIdPrefix() + "password",
             title: this.$t('nsInput.password.title'),
@@ -149,7 +150,31 @@
             inputType: 'password',
             maxSize: 20,
             errorInfo: '',
+          }
+        }
+      }
+    },
+    watch: {
+      lang(){
+        this.inputs = {
+          account: {
+            inputId: inputIdPrefix() + "account",
+            title: this.$t('nsInput.account.title'),
+            placeholder: this.$t('nsInput.account.placeholder'),
+            hasAppend: false,
+            inputType: 'text',
+            maxSize: 20,
+            errorInfo: '',
           },
+          password: {
+            inputId: inputIdPrefix() + "password",
+            title: this.$t('nsInput.password.title'),
+            placeholder: this.$t('nsInput.password.placeholder'),
+            hasAppend: true,
+            inputType: 'password',
+            maxSize: 20,
+            errorInfo: '',
+          }
         }
       }
     }
