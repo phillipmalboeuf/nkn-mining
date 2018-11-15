@@ -46,8 +46,8 @@
         if(!this.wallet) {
           return
         }
-        let walletData = new Blob([this.wallet.toJSON()], {type: "text/plain;charset=utf-8"});
-        FileSaver.saveAs(walletData, "wallet.dat");
+        let walletFile = new File([this.wallet.toJSON()], "wallet.dat");
+        FileSaver.saveAs(walletFile)
       },
     },
     mounted() {

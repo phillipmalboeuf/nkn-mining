@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 	"strings"
 	"net"
+	"runtime"
 )
 
 func FileExist(filename string) bool {
@@ -290,5 +291,9 @@ func NknBinExists() bool {
 	nodeApp := nodeWorkPath + "/nknd"
 
 	return FileExist(nodeApp)
+}
+
+func IsWindowsOS() bool {
+	return "windows" == runtime.GOOS
 }
 

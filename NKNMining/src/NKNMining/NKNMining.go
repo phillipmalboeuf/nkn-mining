@@ -77,10 +77,15 @@ func main() {
 		os.Exit(0)
 	}
 
+
 	//init logs
 	common.InitLog(config.ShellConfig.LogFile)
-	if startDaemon() {
-		return
+
+	//start daemon mode in the os other then windows
+	if !common.IsWindowsOS(){
+		if startDaemon() {
+			return
+		}
 	}
 
 	storage.InitSetupInfo()

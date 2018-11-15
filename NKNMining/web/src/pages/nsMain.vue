@@ -341,8 +341,8 @@
         })
       },
       downloadWallet() {
-        let walletData = new Blob([NSLocalStorage.getWallet()], {type: "text/plain;charset=utf-8"});
-        FileSaver.saveAs(walletData, "wallet.dat");
+        let walletFile = new File([NSLocalStorage.getWallet()], "wallet.dat");
+        FileSaver.saveAs(walletFile)
       },
 
       startMining() {

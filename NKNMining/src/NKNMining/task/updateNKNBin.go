@@ -95,7 +95,11 @@ func doBinUpdate(toVersion string, url string) {
 	}
 
 
-	err = mvNKNBin(unzippedBin, basicPath + "/nknd")
+	if common.IsWindowsOS() {
+		err = mvNKNBin(unzippedBin, basicPath + "/nknd.exe")
+	} else {
+		err = mvNKNBin(unzippedBin, basicPath + "/nknd")
+	}
 	if nil != err {
 		common.Log.Error("move bin file failed: ", err)
 		return

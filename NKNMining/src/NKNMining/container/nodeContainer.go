@@ -17,6 +17,9 @@ func InitNodeContainers() {
 	shellWorkPath := common.GetCurrentDirectory()
 	nodeWorkPath := shellWorkPath + "/bin"
 	nodeApp := nodeWorkPath + "/nknd"
+	if common.IsWindowsOS() {
+		nodeApp += ".exe"
+	}
 
 	if !Node.InitEnvironment(nodeApp, nodeWorkPath) {
 		common.Log.Fatal("initialization of NKN node failed!")
