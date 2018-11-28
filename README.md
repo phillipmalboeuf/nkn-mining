@@ -4,7 +4,7 @@ description: NKN mining web application.
 
 # nkn-mining
 
-## How to build
+## How to build 🍀 
 
  **Note: This build script only tested on Mac OS X**
 
@@ -14,7 +14,7 @@ description: NKN mining web application.
 4. run ./build.sh script
 5. when script done, you will find the output file under ./dist directory
 
-## How to use
+## How to use 🍀 
 
 ### What do you need first!
 
@@ -22,7 +22,7 @@ description: NKN mining web application.
 2. A public ipv4 address
 3. Permission of port open between 30000 ~ 30003
 
-### step 0
+### step 0 
 
 Upload the package to your server and run NKNMining program.
 
