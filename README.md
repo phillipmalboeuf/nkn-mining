@@ -1,6 +1,22 @@
-# How to use
+---
+description: NKN mining web application.
+---
 
-## What do you need first!
+# nkn-mining
+
+## How to build
+
+ **Note: This build script only tested on Mac OS X**
+
+1. intall npm & golang first
+2. clone or download this repository
+3. cd to the directory
+4. run ./build.sh script
+5. when script done, you will find the output file under ./dist directory
+
+## How to use
+
+### What do you need first!
 
 1. A computer to run the NKNMining application
 2. A public ipv4 address
@@ -52,4 +68,6 @@ The NKN node is setup already! Now you can turn on/off your node to mining NKN o
 ### Q&A
 
 Discord: [https://discord.gg/wUBNKFm](https://discord.gg/wUBNKFm)
+
+ **Note: This repository is in the early development stage and may not have all functions working properly. It should be used only for testing now.**
 

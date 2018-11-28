@@ -1,6 +1,6 @@
 # Table of contents
 
-* [How to use](README.md)
+* [nkn-mining](README.md)
 * [Untitled](nknmining.md)
 * [Untitled](untitled.md)
 
