@@ -19,7 +19,11 @@ $ serial number(sn): NKN-fef5d6b5-ba56-11e8-9c0b-260049909001
 
 ### step 1
 
-Open http://ip:8181/web/ \(e.g: http://127.0.0.1:8181/web/\) to create your control account.
+Open http://ip:8181/web/  to create your control account.e.g:
+
+```text
+http://127.0.0.1:8181/web/
+```
 
 ![](.gitbook/assets/step1.png)
 
