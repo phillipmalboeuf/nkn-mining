@@ -11,7 +11,7 @@ NKN mining web application.
 5. when script done, you will find the output file under ./dist directory
 
 ## How to use
-### <font color=red>What do you need first!</font>
+### <font color='red'>What do you need first!</font>
 1.A computer to run the NKNMining application
 2.A public ipv4 address
 3.Permission of port open between 30000 ~ 30003
