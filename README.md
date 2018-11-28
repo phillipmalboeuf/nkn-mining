@@ -25,3 +25,27 @@ Open http://ip:8181/web/ \(e.g: http://127.0.0.1:8181/web/\) to create your cont
 
 **Note: ‘System initialization serial number’ here is the ‘serial number’ string from step 0.**
 
+### step 2
+
+Generate a wallet for node running.
+
+![](.gitbook/assets/step2.png)
+
+**Note: password in this page is for wallet.**
+
+### step 3
+
+In this step you will see your wallet information.Also you can click ‘Download wallet’ button to save your wallet file.
+
+![](.gitbook/assets/step3.png)
+
+### step 4
+
+The NKN node is setup already! Now you can turn on/off your node to mining NKN or transfer some NKN you mined to someone else.
+
+![](.gitbook/assets/step4.png)
+
+### Q&A
+
+Discord: [https://discord.gg/wUBNKFm](https://discord.gg/wUBNKFm)
+
