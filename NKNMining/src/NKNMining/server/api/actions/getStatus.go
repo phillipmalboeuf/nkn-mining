@@ -25,7 +25,12 @@ func (g *getStatus) Action(ctx *gin.Context) {
 	if "" != errInfo {
 		g.response.InternalServerError(errInfo)
 	} else {
+		downloadingProgress := 100.0
+		if status.IsChainDataDownloading() {
+			downloadingProgress = task.GetChainDataDownloadProgress()
+		}
 		g.response.Success(map[string] interface{} {
+			"chainDataDownloadingProgress": downloadingProgress,
 			"shellStatus": nsStatus,
 			"blockHeight": task.CurrentHeight.Result,
 			"nknNetworkHeight": task.TheNetworkHeight.Result,

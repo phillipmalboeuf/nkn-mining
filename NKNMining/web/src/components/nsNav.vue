@@ -3,6 +3,7 @@
         <div class="nkn-nav-bar">
             <div class="nkn-logo" @click="goHome">
                 <img src="../assets/img/icon/logo.png"/>
+                <span> - V0.0.7</span>
             </div>
             <div class="nav-bar-dropdown">
                 <div v-if="showUserIcon" class="nkn-user"
@@ -84,7 +85,7 @@
         margin-bottom: 30px;
         background: #ffffff;
         line-height: 60px;
-        font-size: 0;
+        font-size: 16px;
     }
 
     .nkn-nav-bar {
@@ -96,11 +97,12 @@
 
     .nkn-logo {
         float: left;
-
+        color: #243a80;
     }
 
     .nkn-logo > img {
         height: 30px;
+        margin-top: -4px;
     }
 
     .nkn-user, .nkn-lang-sel {

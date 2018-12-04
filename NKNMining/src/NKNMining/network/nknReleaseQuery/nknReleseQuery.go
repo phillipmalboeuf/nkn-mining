@@ -9,6 +9,7 @@ import (
 	"errors"
 	"os"
 	"io"
+	"time"
 )
 
 const (
@@ -68,8 +69,28 @@ func LastVersion() (version  string, binUrl string, err error) {
 	return
 }
 
+func checkDownloaded(downloadedBytes *float64, complete *bool, output *os.File) {
+	if nil == downloadedBytes {
+		return
+	}
 
-func DownloadNKN(url string, fileName string) (err error) {
+	for  {
+		time.Sleep(time.Millisecond * 50)
+		fi, err := output.Stat()
+		if nil != err {
+			common.Log.Error(err)
+			break
+		}
+
+		*downloadedBytes = float64(fi.Size())
+		if *complete {
+			break
+		}
+	}
+}
+
+
+func DownloadNKN(url string, fileName string, downloadedBytes *float64) (err error) {
 	output, err := os.Create(fileName)
 	if err != nil {
 		common.Log.Error("Error while creating ", fileName, "-", err)
@@ -85,7 +106,13 @@ func DownloadNKN(url string, fileName string) (err error) {
 	}
 	defer r.Body.Close()
 
+	complete := false
+	if nil != downloadedBytes {
+		go checkDownloaded(downloadedBytes, &complete, output)
+	}
+
 	_, err = io.Copy(output, r.Body)
+	complete = true
 	if err != nil {
 		common.Log.Error("Error while downloading ", url, "-", err)
 		return

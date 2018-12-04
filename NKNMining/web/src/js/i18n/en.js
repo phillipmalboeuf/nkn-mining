@@ -59,6 +59,7 @@ module.exports = {
       on: 'on',
       off: 'off',
       mining:{
+        downloading: "you can't mining when history data downloading.",
         fail: 'start mining failed. please check log on the server.',
         error: "you can't mining when node updating.",
         stopfail: 'stop mining failed. please check log on the server.'
@@ -66,6 +67,7 @@ module.exports = {
       nodeStatus:{
         prefix: 'Node status: ',
         init: '@:nsMain.node.nodeStatus.prefix sync ...',
+        chainDownloading: '@:nsMain.node.nodeStatus.prefix downloading history blocks {progress}%',
         starting: 'starting',
         updating: '@:nsMain.node.nodeStatus.prefix updating',
         stopping: 'stopping',

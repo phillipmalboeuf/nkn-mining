@@ -60,6 +60,7 @@ let loadPage = function () {
         }
         break
 
+      case serverStatus.NS_STATUS_INITIALIZATION():
       case serverStatus.NS_STATUS_UPDATE_BIN():
         if(!NSLocalStorage.checkLogin() || !NSLocalStorage.verifyData()) {
           goToPage(currentPage, nsNamespace.SIGN_IN, $router)

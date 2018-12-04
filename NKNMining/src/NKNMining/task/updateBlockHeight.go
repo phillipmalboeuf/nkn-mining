@@ -41,6 +41,9 @@ func UpdateCurrentHeight() {
 		shellStatus, errInfo := status.GetServerStatus()
 
 		if "" != errInfo || shellStatus != common.NS_STATUS_NODE_RUNNING {
+			if "" != errInfo {
+				common.Log.Error(errInfo)
+			}
 			time.Sleep(5 * time.Second)
 			continue
 		}

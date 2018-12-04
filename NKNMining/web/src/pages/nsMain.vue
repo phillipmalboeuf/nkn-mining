@@ -162,7 +162,11 @@
       }
 
       if(data.Data.shellStatus !== serverStatus.NS_STATUS_NODE_RUNNING()) {
-        if(data.Data.shellStatus === serverStatus.NS_STATUS_UPDATE_BIN()) {
+        if(data.Data.shellStatus === serverStatus.NS_STATUS_INITIALIZATION()) {
+          let progress = (data.Data.chainDataDownloadingProgress * 100).toFixed(2)
+          this.nodeStatus = this.$t('nsMain.node.nodeStatus.chainDownloading',
+            {"progress":progress})
+        } else if(data.Data.shellStatus === serverStatus.NS_STATUS_UPDATE_BIN()) {
           this.nodeStatus = this.$t('nsMain.node.nodeStatus.updating')
         } else {
           this.nodeStatus = this.$t('nsMain.node.nodeStatus.stoped')
@@ -172,9 +176,11 @@
         scope.$store.commit(nsNamespace.GLOBAL + "/updateNodeRunning", false)
         setTimeout(function () {
           loopStatusQuery(scope)
-        }, 5000)
+        }, 1000)
         return
       }
+
+
 
       scope.$store.commit(nsNamespace.GLOBAL + "/updateNodeRunning", true)
       switch(data.Data.syncStatus) {
@@ -250,6 +256,21 @@
     })
   }
 
+  function loopNodeVersionQuery(scope) {
+    Http.getVersion(this, function (data) {
+      console.log(data)
+      scope.version = data.Data.NodeVersion
+      setTimeout(function () {
+        loopNodeVersionQuery(scope)
+      }, 5000)
+    }, function () {
+      console.log("get version failed")
+      setTimeout(function () {
+        loopNodeVersionQuery(scope)
+      }, 5000)
+    })
+  }
+
   export default {
     components: {NsLoading},
     name: "ns-main",
@@ -274,12 +295,7 @@
       loopWalletQuery(this, nknWallet.newWallet("pwd"))
       loopStatusQuery(this)
       loopMiningRewardsQuery(this)
-
-      Http.getVersion(this, function (data) {
-        this.version = data.Data.NodeVersion
-      }, function () {
-        console.log("get version failed")
-      })
+      loopNodeVersionQuery(this)
     },
     methods: {
       showTransferDlg() {
@@ -348,6 +364,11 @@
       startMining() {
         if(serverStatus.NS_STATUS_UPDATE_BIN() === this.shellStatus) {
           alert(this.$t('nsMain.node.mining.error'))
+          return
+        }
+
+        if(serverStatus.NS_STATUS_INITIALIZATION() === this.shellStatus) {
+          alert(this.$t('nsMain.node.mining.downloading'))
           return
         }
         this.nodeStatus = this.$t('nsMain.node.nodeStatus.starting')

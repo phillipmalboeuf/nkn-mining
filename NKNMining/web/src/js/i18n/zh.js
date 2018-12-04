@@ -59,6 +59,7 @@ module.exports = {
       on: '开',
       off: '关',
       mining:{
+        downloading: "您不能在下载历史区块儿时开启矿机。",
         fail: '开启矿机失败。请检查服务器日志。',
         error: "您不能在节点更新时开启矿机。",
         stopfail: '关闭矿机失败。请检查服务器日志。'
@@ -66,6 +67,7 @@ module.exports = {
       nodeStatus:{
         prefix: '节点状态：',
         init: '@:nsMain.node.nodeStatus.prefix 同步中 ...',
+        chainDownloading: '@:nsMain.node.nodeStatus.prefix 下载历史区块中 {progress}%',
         starting: '正在开启',
         updating: '@:nsMain.node.nodeStatus.prefix 更新中',
         stopping: '正在关闭',

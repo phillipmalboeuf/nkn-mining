@@ -6,6 +6,25 @@ import (
 	"NKNMining/common"
 )
 
+var binDownloaded = false
+var chainDataDownloaded = true
+
+func SetBinDownloaded() {
+	binDownloaded = true
+}
+
+func SetChainDataDownloaded() {
+	chainDataDownloaded = true
+}
+
+func IsChainDataDownloading() bool {
+	return !chainDataDownloaded
+}
+
+func IsInitFinished() bool {
+	return binDownloaded && chainDataDownloaded
+}
+
 func statusFromNodeContainer(status *int) (ret bool) {
 	ret = true
 	switch container.Node.Status() {
@@ -38,12 +57,20 @@ func GetServerStatus() (status int, errInfo string) {
 		break
 
 	case storage.SETUP_NODE_UPDATE:
-		status = common.NS_STATUS_NODE_UPDATE
+		if !IsInitFinished() {
+			status = common.NS_STATUS_INITIALIZATION
+		} else {
+			status = common.NS_STATUS_NODE_UPDATE
+		}
 		break
 
 	case storage.SETUP_STEP_SUCCESS:
-		if !statusFromNodeContainer(&status) {
-			errInfo = "invalid node status!"
+		if !IsInitFinished() {
+			status = common.NS_STATUS_INITIALIZATION
+		} else {
+			if !statusFromNodeContainer(&status) {
+				errInfo = "invalid node status!"
+			}
 		}
 		break
 
@@ -57,6 +84,7 @@ func GetServerStatus() (status int, errInfo string) {
 
 func CanStartNode() bool {
 	status, errInfo := GetServerStatus()
-	return common.NS_STATUS_NODE_EXITED == status &&
+	return IsInitFinished() &&
+		common.NS_STATUS_NODE_EXITED == status &&
 		"" == errInfo
 }

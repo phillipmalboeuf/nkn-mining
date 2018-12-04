@@ -7,5 +7,6 @@ func StartAllTask() {
 	go UpdateNKNBin()
 	go UpdateCurrentHeight()
 	go UpdateNetworkHeight()
+	//go ChainDataDownloading()
 
 }

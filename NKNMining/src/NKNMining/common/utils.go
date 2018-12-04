@@ -17,8 +17,10 @@ import (
 )
 
 func FileExist(filename string) bool {
-	_, err := os.Stat(filename)
-	return nil == err
+	if _, err := os.Stat(filename); !os.IsNotExist(err) {
+		return true
+	}
+	return false
 }
 
 func ByteSliceReverse(s []byte) {
@@ -289,6 +291,9 @@ func NknBinExists() bool {
 	shellWorkPath := GetCurrentDirectory()
 	nodeWorkPath := shellWorkPath + "/bin"
 	nodeApp := nodeWorkPath + "/nknd"
+	if IsWindowsOS() {
+		nodeApp += ".exe"
+	}
 
 	return FileExist(nodeApp)
 }

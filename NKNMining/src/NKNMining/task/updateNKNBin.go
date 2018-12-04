@@ -33,9 +33,18 @@ func mvNKNBin(from string, to string) error {
 
 func doBinUpdate(toVersion string, url string) {
 	needRestart := false
+	initialization := nknBinFirstUpdate
 	currentStep := storage.NKNSetupInfo.CurrentStep
 
-	if storage.NKNSetupInfo.CurrentStep == storage.SETUP_NODE_UPDATE && !nknBinFirstUpdate {
+	if common.NknBinExists() {
+		status.SetBinDownloaded()
+	}
+
+	if currentStep == storage.SETUP_NODE_UPDATE && !nknBinFirstUpdate {
+		if !nknBinNeedUpdate(toVersion) {
+			storage.NKNSetupInfo.CurrentStep = storage.SETUP_STEP_SUCCESS
+			storage.NKNSetupInfo.Save()
+		}
 		return
 	}
 
@@ -55,6 +64,7 @@ func doBinUpdate(toVersion string, url string) {
 		binRunStatus, errInfo := status.GetServerStatus()
 
 		if !nknBinNeedUpdate(toVersion) {
+			currentStep = storage.SETUP_STEP_SUCCESS
 			return
 		}
 
@@ -82,7 +92,7 @@ func doBinUpdate(toVersion string, url string) {
 	unzippedBin := basicPath + "/" +runtime.GOOS + "-" + runtime.GOARCH + "/nknd"
 	fileName := runtime.GOOS + "-" + runtime.GOARCH + "." + toVersion + ".zip"
 	fullName := basicPath + "/" + fileName
-	err = nknReleaseQuery.DownloadNKN(url, fullName)
+	err = nknReleaseQuery.DownloadNKN(url, fullName, nil)
 	if nil != err {
 		return
 	}
@@ -103,6 +113,10 @@ func doBinUpdate(toVersion string, url string) {
 	if nil != err {
 		common.Log.Error("move bin file failed: ", err)
 		return
+	}
+
+	if initialization {
+		status.SetBinDownloaded()
 	}
 
 	storage.NKNSetupInfo.BinVersion = toVersion

@@ -27,7 +27,11 @@ func (s *startNodeAPI) Action(ctx *gin.Context) {
 	s.response = apiServerResponse.New(ctx)
 
 	if !status.CanStartNode() {
-		s.response.Forbidden("invalid node status!")
+		if status.IsChainDataDownloading() {
+			s.response.Forbidden(nil)
+		} else {
+			s.response.Forbidden("invalid node status!")
+		}
 		return
 	}
 

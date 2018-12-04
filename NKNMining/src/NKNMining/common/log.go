@@ -8,6 +8,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type nknLog struct {
@@ -29,6 +30,9 @@ func InitLog(logfile string) {
 
 	Log.Formatter = &logrus.TextFormatter{
 		ForceColors: true,
+		DisableTimestamp: false,
+		FullTimestamp:true,
+		TimestampFormat: time.StampMilli,
 	}
 
 	// Only log the warning severity or above.

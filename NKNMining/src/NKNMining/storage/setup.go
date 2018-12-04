@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"github.com/pborman/uuid"
 	"fmt"
+	"os"
 )
 
 const (
@@ -30,6 +31,13 @@ func InitSetupInfo()  {
 	}
 
 	if SETUP_STEP_INIT != NKNSetupInfo.CurrentStep {
+		if SETUP_STEP_CREATE_ACCOUNT != NKNSetupInfo.CurrentStep {
+			if common.IsWindowsOS() {
+				fmt.Println("NKNMining start up")
+			} else {
+				fmt.Println("NKNMining start up in background")
+			}
+		}
 		return
 	}
 
@@ -58,7 +66,11 @@ type SetupInfo struct {
 	SelfNode string
 }
 
-var NKNSetupInfo = &SetupInfo{}
+var NKNSetupInfo = &SetupInfo{
+	CurrentStep: 0,
+	BinVersion: "",
+	SelfNode: "http://127.0.0.1:30003",
+}
 
 func (s *SetupInfo) Reset()  {
 	NKNSetupInfo = &SetupInfo{SerialNumber: NKNSetupInfo.SerialNumber, CurrentStep: SETUP_STEP_CREATE_ACCOUNT}
@@ -77,14 +89,23 @@ func (s *SetupInfo) GetWalletKey() string {
 func (s *SetupInfo) Load()  {
 	setupInfo, err := ioutil.ReadFile(setupFile)
 	if nil != err {
-		common.Log.Fatal("no setup info!")
+		s.Save()
+		common.Log.Error("no setup info! use default setup param")
+		return
 	}
 
 	setupInfo = bytes.TrimPrefix(setupInfo, []byte("\xef\xbb\xbf"))
+	if 0 == len(setupInfo) {
+		s.Save()
+		common.Log.Error("blank setup info! use default setup param")
+		return
+	}
 
 	err = json.Unmarshal(setupInfo, s)
 	if nil != err {
-		common.Log.Fatal("setup file damaged!")
+		s.Save()
+		common.Log.Error("setup file damaged! use default setup param")
+		return
 	}
 }
 
@@ -94,6 +115,7 @@ func (s *SetupInfo) Save() error {
 	err := ioutil.WriteFile(setupFile, setupInfo, 0666)
 	if nil != err {
 		common.Log.Fatal("save setup file failed!")
+		os.Exit(-3)
 	}
 
 	return err
