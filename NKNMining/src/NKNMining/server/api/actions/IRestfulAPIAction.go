@@ -29,7 +29,6 @@ func (r *restfulAPIBase) getUrlParam(paramMap map[string]interface{}, ctx *gin.C
 		StringKind: r.getUrlStringParam,
 		BoolKind:   r.getUrlBoolParam,
 	}
-
 	var err error
 	for k, v := range paramMap {
 		vKind := InterfaceKindPtrCompatible(v)
