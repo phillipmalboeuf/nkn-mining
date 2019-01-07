@@ -125,7 +125,7 @@
             this.$router.push({name: nsNamespace.MAIN})
           },
           function () {
-            alert(this.$t('nsSignIn.nsInput.loginfail'))
+            alert(this.$t('nsSignIn.loginfail'))
           }
         )
       }

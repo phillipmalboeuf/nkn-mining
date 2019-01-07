@@ -36,6 +36,7 @@ func doBinUpdate(toVersion string, url string) {
 	initialization := nknBinFirstUpdate
 	currentStep := storage.NKNSetupInfo.CurrentStep
 
+
 	if common.NknBinExists() {
 		status.SetBinDownloaded()
 	}
@@ -64,6 +65,11 @@ func doBinUpdate(toVersion string, url string) {
 		binRunStatus, errInfo := status.GetServerStatus()
 
 		if !nknBinNeedUpdate(toVersion) {
+			if 	storage.NKNSetupInfo.CurrentStep == storage.SETUP_STEP_INIT ||
+			 	storage.NKNSetupInfo.CurrentStep == storage.SETUP_STEP_GEN_WALLET ||
+				storage.NKNSetupInfo.CurrentStep == storage.SETUP_STEP_CREATE_ACCOUNT {
+				return
+			}
 			currentStep = storage.SETUP_STEP_SUCCESS
 			return
 		}
@@ -146,7 +152,6 @@ func UpdateNKNBin()  {
 			common.Log.Error(err)
 		} else {
 			doBinUpdate(version, url)
-
 		}
 
 		time.Sleep(120 * time.Second)
