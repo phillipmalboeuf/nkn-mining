@@ -53,7 +53,7 @@ func startDaemon() (hasNewProcess bool)  {
 func getCliApp() (app *cli.App) {
 	app = cli.NewApp()
 	app.Name = "NKN Mining"
-	app.Version = "0.0.1"
+	app.Version = "0.0.8"
 	app.HelpName = "NKNMining"
 	app.Usage = "NKN Mining application"
 	app.UsageText = "NKNMining [options] [args]"
