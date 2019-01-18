@@ -153,11 +153,9 @@
         scope.neighbor = []
       } else {
         for(let i=0; i<scope.neighbor.length; i++){
-          scope.neighbor[i].IpAddr =
-            scope.neighbor[i].IpAddr[12] + '.' +
-            scope.neighbor[i].IpAddr[13] + '.' +
-            scope.neighbor[i].IpAddr[14] + '.' +
-            scope.neighbor[i].IpAddr[15]
+          let ip = scope.neighbor[i].addr.split('://')[1].split(':')
+          scope.neighbor[i].IpAddr = ip[0]
+          scope.neighbor[i].Port = ip[1]
         }
       }
 

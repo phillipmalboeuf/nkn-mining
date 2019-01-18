@@ -3,7 +3,7 @@
         <div class="nkn-nav-bar">
             <div class="nkn-logo" @click="goHome">
                 <img src="../assets/img/icon/logo.png"/>
-                <span> - V0.0.8</span>
+                <span> - V0.0.9</span>
             </div>
             <div class="nav-bar-dropdown">
                 <div v-if="showUserIcon" class="nkn-user"
