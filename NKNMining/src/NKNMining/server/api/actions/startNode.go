@@ -24,55 +24,55 @@ func (s *startNodeAPI) URI(serverURI string) string {
 }
 
 func (s *startNodeAPI) Action(ctx *gin.Context) {
-	s.response = apiServerResponse.New(ctx)
+	response := apiServerResponse.New(ctx)
 
 	if !status.CanStartNode() {
 		if status.IsChainDataDownloading() {
-			s.response.Forbidden(nil)
+			response.Forbidden(nil)
 		} else {
-			s.response.Forbidden("invalid node status!")
+			response.Forbidden("invalid node status!")
 		}
 		return
 	}
 
 	inputJson, err := s.ExtractInput(ctx)
 	if nil != err {
-		s.response.BadRequest("invalid raw request!")
+		response.BadRequest("invalid raw request!")
 		return
 	}
 
 	basicData := &restfulAPIBaseRequest{}
 	err = json.Unmarshal([]byte(inputJson), basicData)
 	if nil != err {
-		s.response.BadRequest("invalid request format!")
+		response.BadRequest("invalid request format!")
 		return
 	}
 
 	cmdStr, err := crypto.AesDecrypt(basicData.Data,
 		storage.NKNSetupInfo.GetRequestKey())
 	if nil != err {
-		s.response.BadRequest("invalid request data!")
+		response.BadRequest("invalid request data!")
 		return
 	}
 
 	if startCmd != cmdStr {
-		s.response.BadRequest(nil)
+		response.BadRequest(nil)
 		return
 	}
 
 	wKey, err := crypto.AesDecrypt(storage.NKNSetupInfo.WKey, storage.NKNSetupInfo.GetWalletKey())
 	if nil != err {
-		s.response.InternalServerError(nil)
+		response.InternalServerError(nil)
 		return
 	}
 
 	_, err = container.Node.AsyncRun([]string{"-p", wKey, "--no-check-port"}, "")
 	if nil != err {
-		s.response.InternalServerError("start node failed!")
+		response.InternalServerError("start node failed!")
 		return
 	}
 
-	s.response.Success(nil)
+	response.Success(nil)
 
 	return
 }

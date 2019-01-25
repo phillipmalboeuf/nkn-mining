@@ -4,7 +4,6 @@ import (
 	. "NKNMining/common"
 	"github.com/gin-gonic/gin"
 	"strconv"
-	"NKNMining/server/api/response"
 	"io/ioutil"
 )
 
@@ -20,7 +19,6 @@ type restfulAPIBaseRequest struct {
 }
 
 type restfulAPIBase struct {
-	response *apiServerResponse.Response
 }
 
 func (r *restfulAPIBase) getUrlParam(paramMap map[string]interface{}, ctx *gin.Context) error {

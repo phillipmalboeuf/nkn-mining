@@ -19,17 +19,17 @@ func (g *getStatus) URI(serverURI string) string {
 }
 
 func (g *getStatus) Action(ctx *gin.Context) {
-	g.response = apiServerResponse.New(ctx)
+	response := apiServerResponse.New(ctx)
 	nsStatus, errInfo := status.GetServerStatus()
 
 	if "" != errInfo {
-		g.response.InternalServerError(errInfo)
+		response.InternalServerError(errInfo)
 	} else {
 		downloadingProgress := 100.0
 		if status.IsChainDataDownloading() {
 			downloadingProgress = task.GetChainDataDownloadProgress()
 		}
-		g.response.Success(map[string] interface{} {
+		response.Success(map[string] interface{} {
 			"chainDataDownloadingProgress": downloadingProgress,
 			"shellStatus": nsStatus,
 			"blockHeight": task.CurrentHeight.Result,

@@ -17,10 +17,23 @@ var CurrentHeight = &rpcApiResponse.BlockHeight{}
 var TheNetworkHeight = &rpcApiResponse.BlockHeight{}
 
 func UpdateNetworkHeight() {
-	for {
-		time.Sleep(5 * time.Second)
 
-		response, err := http.Post("http://testnet-node-0001.nkn.org:30003",
+	seedList := []string {
+		"http://testnet-seed-0001.nkn.org:30003",
+		"http://testnet-seed-0002.nkn.org:30003",
+		"http://testnet-seed-0003.nkn.org:30003",
+		"http://testnet-seed-0004.nkn.org:30003",
+		"http://testnet-seed-0005.nkn.org:30003",
+		"http://testnet-seed-0006.nkn.org:30003",
+		"http://testnet-seed-0007.nkn.org:30003",
+		"http://testnet-seed-0008.nkn.org:30003",
+	}
+	baseStart := uint64(1)
+	mod := uint64(len(seedList))
+	for {
+		time.Sleep(10 * time.Second)
+		baseStart += 1
+		response, err := http.Post(seedList[baseStart % mod],
 			"text/plain",
 			strings.NewReader("{\"jsonrpc\":\"2.0\",\"id\":\"NKNMining\",\"method\":\"getlatestblockheight\",\"params\":{} }"))
 		if nil != err {

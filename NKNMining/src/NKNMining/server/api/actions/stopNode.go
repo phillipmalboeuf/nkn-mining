@@ -23,35 +23,35 @@ func (s *stopNodeAPI) URI(serverURI string) string {
 }
 
 func (s *stopNodeAPI) Action(ctx *gin.Context) {
-	s.response = apiServerResponse.New(ctx)
+	response := apiServerResponse.New(ctx)
 
 	inputJson, err := s.ExtractInput(ctx)
 	if nil != err {
-		s.response.BadRequest("invalid raw request!")
+		response.BadRequest("invalid raw request!")
 		return
 	}
 
 	basicData := &restfulAPIBaseRequest{}
 	err = json.Unmarshal([]byte(inputJson), basicData)
 	if nil != err {
-		s.response.BadRequest("invalid request format!")
+		response.BadRequest("invalid request format!")
 		return
 	}
 
 	cmdStr, err := crypto.AesDecrypt(basicData.Data,
 		storage.NKNSetupInfo.GetRequestKey())
 	if nil != err {
-		s.response.BadRequest("invalid request data!")
+		response.BadRequest("invalid request data!")
 		return
 	}
 
 	if stopCmd != cmdStr {
-		s.response.BadRequest(nil)
+		response.BadRequest(nil)
 		return
 	}
 
 	container.Node.Stop()
-	s.response.Success(nil)
+	response.Success(nil)
 
 	return
 }

@@ -25,18 +25,18 @@ func (s *setWallet) URI(serverURI string) string {
 }
 
 func (s *setWallet) Action(ctx *gin.Context) {
-	s.response = apiServerResponse.New(ctx)
+	response := apiServerResponse.New(ctx)
 
 	inputJson, err := s.ExtractInput(ctx)
 	if nil != err {
-		s.response.BadRequest("invalid raw request!")
+		response.BadRequest("invalid raw request!")
 		return
 	}
 
 	basicData := &restfulAPIBaseRequest{}
 	err = json.Unmarshal([]byte(inputJson), basicData)
 	if nil != err {
-		s.response.BadRequest("invalid request format!")
+		response.BadRequest("invalid request format!")
 		return
 	}
 
@@ -44,14 +44,14 @@ func (s *setWallet) Action(ctx *gin.Context) {
 	walletInfoJsonStr, err := crypto.AesDecrypt(basicData.Data,
 		storage.NKNSetupInfo.GetRequestKey())
 	if nil != err {
-		s.response.BadRequest("invalid request data!")
+		response.BadRequest("invalid request data!")
 		return
 	}
 
 	walletInfoData := &setWalletData{}
 	err = json.Unmarshal([]byte(walletInfoJsonStr), walletInfoData)
 	if nil != err {
-		s.response.BadRequest("invalid wallet setting data!")
+		response.BadRequest("invalid wallet setting data!")
 		return
 	}
 
@@ -59,15 +59,15 @@ func (s *setWallet) Action(ctx *gin.Context) {
 	checked, err := walletStorage.Save(walletInfoData.Wallet)
 	if nil != err {
 		if checked {
-			s.response.InternalServerError("save wallet failed!")
+			response.InternalServerError("save wallet failed!")
 		} else {
-			s.response.BadRequest("invalid wallet data!")
+			response.BadRequest("invalid wallet data!")
 		}
 	} else {
 		storage.NKNSetupInfo.CurrentStep = storage.SETUP_STEP_SUCCESS
 		storage.NKNSetupInfo.WKey = walletInfoData.Key
 		storage.NKNSetupInfo.Save()
-		s.response.Success(nil)
+		response.Success(nil)
 	}
 
 	return

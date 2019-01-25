@@ -31,7 +31,7 @@ func mvNKNBin(from string, to string) error {
 	return os.Rename(from, to)
 }
 
-func doBinUpdate(toVersion string, url string) {
+func doBinUpdate(toVersion string, url string) (err error) {
 	needRestart := false
 	initialization := nknBinFirstUpdate
 	currentStep := storage.NKNSetupInfo.CurrentStep
@@ -50,12 +50,13 @@ func doBinUpdate(toVersion string, url string) {
 	}
 
 	defer func() {
-		storage.NKNSetupInfo.CurrentStep = currentStep
-		storage.NKNSetupInfo.Save()
+		//if storage.SETUP_STEP_CREATE_ACCOUNT != storage.NKNSetupInfo.CurrentStep ||
+		//   storage.SETUP_STEP_GEN_WALLET != storage.NKNSetupInfo.CurrentStep {
+		//	return
+		//}
+		//storage.NKNSetupInfo.CurrentStep = currentStep
+		//storage.NKNSetupInfo.Save()
 	}()
-
-	nknBinFirstUpdate = false
-	var err error = nil
 
 	if common.NknBinExists() {
 		if nknBinFirstUpdate && storage.SETUP_NODE_UPDATE == storage.NKNSetupInfo.CurrentStep {
@@ -86,13 +87,12 @@ func doBinUpdate(toVersion string, url string) {
 		}
 	}
 
-	if 	storage.SETUP_STEP_CREATE_ACCOUNT != currentStep &&
+	if  storage.SETUP_STEP_INIT != currentStep &&
+		storage.SETUP_STEP_CREATE_ACCOUNT != currentStep &&
 		storage.SETUP_STEP_GEN_WALLET != currentStep {
 		storage.NKNSetupInfo.CurrentStep = storage.SETUP_NODE_UPDATE
 		storage.NKNSetupInfo.Save()
 	}
-
-
 
 	basicPath := common.GetCurrentDirectory() + nkn_bin_file_path
 	unzippedBin := basicPath + "/" +runtime.GOOS + "-" + runtime.GOARCH + "/nknd"
@@ -102,7 +102,6 @@ func doBinUpdate(toVersion string, url string) {
 	if nil != err {
 		return
 	}
-
 	err = archiver.Zip.Open(fullName, common.GetCurrentDirectory() + nkn_bin_file_path)
 
 	if nil != err {
@@ -120,6 +119,7 @@ func doBinUpdate(toVersion string, url string) {
 		common.Log.Error("move bin file failed: ", err)
 		return
 	}
+	nknBinFirstUpdate = false
 
 	if initialization {
 		status.SetBinDownloaded()
@@ -131,13 +131,13 @@ func doBinUpdate(toVersion string, url string) {
 		wKey, err := crypto.AesDecrypt(storage.NKNSetupInfo.WKey, storage.NKNSetupInfo.GetWalletKey())
 		if nil != err {
 			common.Log.Error(err)
-			return
+			return err
 		}
 
 		_, err = container.Node.AsyncRun([]string{"-p", wKey}, "")
 		if nil != err {
 			common.Log.Error(err)
-			return
+			return err
 		}
 	}
 
@@ -151,7 +151,11 @@ func UpdateNKNBin()  {
 		if nil != err {
 			common.Log.Error(err)
 		} else {
-			doBinUpdate(version, url)
+			err = doBinUpdate(version, url)
+			if nil != err {
+				time.Sleep(5 * time.Second)
+				continue
+			}
 		}
 
 		time.Sleep(120 * time.Second)

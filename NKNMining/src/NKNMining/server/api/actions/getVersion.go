@@ -19,7 +19,7 @@ func (g *getVersion) URI(serverURI string) string {
 }
 
 func (g *getVersion) Action(ctx *gin.Context) {
-	g.response = apiServerResponse.New(ctx)
+	response := apiServerResponse.New(ctx)
 	nodeVersion := "..."
 
 	nodeVersion, err := container.NodeStatus.SyncRun([]string{"-version"}, "")
@@ -27,7 +27,7 @@ func (g *getVersion) Action(ctx *gin.Context) {
 		nodeVersion = "UNKNOWN"
 	}
 
-	g.response.Success(map[string]string{
+	response.Success(map[string]string{
 		"NodeVersion": nodeVersion,
 		"ShellVersion": common.NS_VERSION,
 		"GinVersion": gin.Version,

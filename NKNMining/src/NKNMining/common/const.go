@@ -1,6 +1,6 @@
 package common
 
-const NS_VERSION  = "NKNMining v0.0.8"
+const NS_VERSION  = "NKNMining v0.0.10"
 const API_VERSION  = "NKNMining.v1"
 
 const (

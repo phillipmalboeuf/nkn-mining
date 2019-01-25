@@ -8,6 +8,7 @@ import (
 	"github.com/pborman/uuid"
 	"fmt"
 	"os"
+	"sync"
 )
 
 const (
@@ -21,6 +22,8 @@ const (
 	SETUP_STEP_SUCCESS
 	SETUP_NODE_UPDATE
 )
+
+var saveMutex = &sync.Mutex{}
 
 func InitSetupInfo()  {
 	NKNSetupInfo.Load()
@@ -110,6 +113,10 @@ func (s *SetupInfo) Load()  {
 }
 
 func (s *SetupInfo) Save() error {
+	saveMutex.Lock()
+	defer func() {
+		saveMutex.Unlock()
+	}()
 	setupInfo, _ := json.MarshalIndent(s, "", "    ")
 
 	err := ioutil.WriteFile(setupFile, setupInfo, 0666)
