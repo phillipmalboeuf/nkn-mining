@@ -42,8 +42,11 @@ func UpdateNetworkHeight() {
 
 		resBody, err := ioutil.ReadAll(response.Body)
 		if nil != err {
+			response.Body.Close()
 			continue
 		}
+
+		response.Body.Close()
 
 		json.Unmarshal(resBody, TheNetworkHeight)
 	}

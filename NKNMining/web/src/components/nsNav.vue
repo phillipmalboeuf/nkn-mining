@@ -3,10 +3,10 @@
         <div class="nkn-nav-bar">
             <div class="nkn-logo" @click="goHome">
                 <img src="../assets/img/icon/logo.png"/>
-                <span> - V0.0.10</span>
+                <span> - V0.2.0</span>
             </div>
             <div class="nav-bar-dropdown">
-                <div v-if="showUserIcon" class="nkn-user"
+                <div v-if="showUserIcon" class="nkn-user nav-bar-dropdown-trigger"
                     data-toggle="dropdown"
                     aria-haspopup="true"
                     aria-expanded="false">
@@ -20,7 +20,19 @@
                 </div>
             </div>
             <div class="nav-bar-dropdown">
-                <div class="nkn-lang-sel"
+                <div v-if="!showUserIcon" class="nkn-user nav-bar-dropdown-trigger"
+                     data-toggle="dropdown"
+                     aria-haspopup="true"
+                     aria-expanded="false">
+                    <img src="../assets/img/icon/userhead.png"/>
+                </div>
+                <div class="nkn-nav-menu dropdown-menu">
+                    <button class="dropdown-item" type="button"
+                            @click="clearCache()">{{$t("nsNav.clearCache")}}</button>
+                </div>
+            </div>
+            <div class="nav-bar-dropdown">
+                <div class="nkn-lang-sel nav-bar-dropdown-trigger"
                 data-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false">
@@ -50,6 +62,10 @@
       }
     },
     methods: {
+      clearCache() {
+        NSLocalStorage.clear()
+        window.location.reload(true)
+      },
       signOut() {
         NSLocalStorage.logout()
         this.$router.push({name: nsNamespace.SIGN_IN})
@@ -127,8 +143,15 @@
 </style>
 
 <style scoped>
+    .nav-bar-dropdown > div.nav-bar-dropdown-trigger {
+        margin-left: 20px;
+    }
     .dropdown-menu {
         margin-left: -80px;
+    }
+
+    .nav-bar-dropdown > div.nkn-nav-lang-sel-menu {
+        margin-left: 0px;
     }
 
     .dropdown-item {

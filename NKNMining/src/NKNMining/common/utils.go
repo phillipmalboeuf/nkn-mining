@@ -301,4 +301,3 @@ func NknBinExists() bool {
 func IsWindowsOS() bool {
 	return "windows" == runtime.GOOS
 }
-

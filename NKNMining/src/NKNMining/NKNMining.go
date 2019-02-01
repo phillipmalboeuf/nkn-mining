@@ -53,7 +53,7 @@ func startDaemon() (hasNewProcess bool)  {
 func getCliApp() (app *cli.App) {
 	app = cli.NewApp()
 	app.Name = "NKN Mining"
-	app.Version = "0.0.10"
+	app.Version = "0.2.0"
 	app.HelpName = "NKNMining"
 	app.Usage = "NKN Mining application"
 	app.UsageText = "NKNMining [options] [args]"
@@ -69,7 +69,7 @@ func main() {
 
 	//set some flags
 	commands.SetFlags(shell)
-	commands.SetAction(shell)
+	commands.SetAction(shell, &storage.IsRemote)
 
 	//run
 	err := shell.Run(os.Args)

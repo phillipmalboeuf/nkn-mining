@@ -8,6 +8,7 @@ module.exports = {
   },
   mark: 'NKN',
   nsNav: {
+    clearCache: '清除缓存',
     signOut: '注销',
     resetNodeMining: '重置 @:mark 矿机'
   },
@@ -16,20 +17,15 @@ module.exports = {
     attention: '目前软件正处于早期研发阶段，可能存在部分问题。请勿用于正式途径。 '
   },
   nsInput: {
-    account: {
-      title: '矿机账号',
-      placeholder: '请输入您的 @:mark 矿机账号',
-      errorInfo: '仅允许输入字母数字！'
-    },
     password: {
-      title: '矿机密码',
-      placeholder: '请输入您的 @:mark 矿机密码',
-      errorInfo: '仅允许8-20个字符！'
+      title: '钱包密码',
+      placeholder: '8 ~ 20个字符',
+      errorInfo: '仅允许8~20个字符！'
     },
     rePassword: {
-      title: '确认矿机密码',
-      placeholder: '请再次输入您的 @:mark 矿机密码',
-      errorInfo: '两次输入的矿机密码不一致！'
+      title: '确认密码',
+      placeholder: '8 ~ 20个字符',
+      errorInfo: '两次输入的密码不一致！'
     },
     sn: {
       title: '序列号',
@@ -65,6 +61,7 @@ module.exports = {
         stopfail: '关闭矿机失败。请检查服务器日志。'
       },
       nodeStatus:{
+        relayCount: '节点传输消息计数： {relayCount}',
         prefix: '节点状态：',
         init: '@:nsMain.node.nodeStatus.prefix 同步中 ...',
         chainDownloading: '@:nsMain.node.nodeStatus.prefix 正在下载NKN节点程序。',
@@ -129,19 +126,12 @@ module.exports = {
       }
     }
   },
-  nsCreateAccount: {
-    titleLabel: '设置 - 第一步',
-    title: '创建账号',
-    nextStepbtn: '下一步'
-  },
   nsGenWallet: {
-    titleLabel: '设置 - 第二步',
     title: '钱包生成',
     link: '钱包上传',
     nextStepbtn: '下一步'
   },
   nsLoadWallet: {
-    titleLabel: '设置 - 第二步',
     title: '钱包上传',
     upload: '上传',
     link: '钱包生成',
@@ -149,7 +139,6 @@ module.exports = {
     netWorkError: '网络连接错误，请稍后重试'
   },
   nsShowWallet: {
-    titleLabel: '设置 - 第三部',
     title: '钱包下载',
     privateKey: '私钥',
     address: '地址',

@@ -5,10 +5,9 @@
                 <div class="operation-title">{{$t("nsMain.node.title")}}</div>
                 <div v-if="this.$store.state.global.nodeRunning" class="switch-button switch-on" @click="stopMining"><img src="../assets/img/icon/switch-on.png"/><span>{{$t("nsMain.node.on")}}</span></div>
                 <div v-else class="switch-button" @click="startMining"><img src="../assets/img/icon/switch-off.png"/><span>{{$t("nsMain.node.off")}}</span></div>
-
                 <div class="node-info">{{nodeStatus}}</div>
-
-                <div class="node-info">{{version}}</div>
+                <div class="node-info">{{versionText}}</div>
+                <div class="node-info">{{$t("nsMain.node.nodeStatus.relayCount", {relayCount:relayCount})}}</div>
                 <div class="node-info">{{$t("nsMain.node.NKNBlockHeight")}} {{this.nknHeight}}</div>
                 <div class="node-info">{{$t("nsMain.node.myBlockHeight")}} {{this.currentHeight}}</div>
             </div>
@@ -140,7 +139,6 @@
   import Http from "../js/network/nsHttp"
   import NSLocalStorage from "../js/nsLocalStorage"
   import FileSaver from 'file-saver'
-  import Crypto from '../js/crypto/algorithm'
 
   function loopStatusQuery(scope) {
     Http.getStatus(scope, function (data) {
@@ -148,6 +146,7 @@
       scope.neighbor = data.Data.neighbor
       scope.currentHeight = data.Data.blockHeight
       scope.nknHeight = data.Data.nknNetworkHeight
+      scope.relayCount = data.Data.nodeInfo.relayMessageCount
 
       if(!scope.neighbor) {
         scope.neighbor = []
@@ -161,9 +160,7 @@
 
       if(data.Data.shellStatus !== serverStatus.NS_STATUS_NODE_RUNNING()) {
         if(data.Data.shellStatus === serverStatus.NS_STATUS_INITIALIZATION()) {
-          let progress = (data.Data.chainDataDownloadingProgress * 100).toFixed(2)
-          this.nodeStatus = this.$t('nsMain.node.nodeStatus.chainDownloading',
-            {"progress":progress})
+          this.nodeStatus = this.$t('nsMain.node.nodeStatus.chainDownloading')
         } else if(data.Data.shellStatus === serverStatus.NS_STATUS_UPDATE_BIN()) {
           this.nodeStatus = this.$t('nsMain.node.nodeStatus.updating')
         } else {
@@ -177,8 +174,6 @@
         }, 1000)
         return
       }
-
-
 
       scope.$store.commit(nsNamespace.GLOBAL + "/updateNodeRunning", true)
       switch(data.Data.syncStatus) {
@@ -256,7 +251,6 @@
 
   function loopNodeVersionQuery(scope) {
     Http.getVersion(this, function (data) {
-      console.log(data)
       scope.version = data.Data.NodeVersion
       setTimeout(function () {
         loopNodeVersionQuery(scope)
@@ -276,15 +270,38 @@
       return {
         walletAddress: "",
         balance: this.$t('nsMain.wallet.balance.init'),
-        accountInfo: NSLocalStorage.getAccount(),
-        version: this.$t('nsMain.node.version.init'),
+        version: '',
         nodeStatus: this.$t('nsMain.node.nodeStatus.init'),
         miningRewards: [],
         nodeInfo: {},
         neighbor: [],
         currentHeight: 0,
         nknHeight: 0,
+        relayCount: 0,
         shellStatus: serverStatus.NS_STATUS_NODE_EXITED(),
+      }
+    },
+    computed: {
+      versionText() {
+        if('' === this.version) {
+          if('zh' === this.$i18n.locale) {
+            return '正在查询版本 ...'
+          } else {
+            return 'Querying version ...'
+          }
+        } else if('UNKNOWN' === this.version) {
+          if('zh' === this.$i18n.locale) {
+            return '正在查询版本 ...'
+          } else {
+            return 'Querying version ...'
+          }
+        }
+
+        if('zh' === this.$i18n.locale) {
+          return '节点版本： ' + this.version.split('version')[1]
+        } else {
+          return 'Node version: ' + this.version.split('version')[1]
+        }
       }
     },
     mounted() {
@@ -323,7 +340,6 @@
           })
         }, function (err) {
           if(err.msg) {
-            // alert(err.msg)
             alert(this.$t('nsMain.transfer.alertInfo.default'))
           } else {
             alert(this.$t('nsMain.transfer.alertInfo.default'))
@@ -339,16 +355,15 @@
           return
         }
 
-        confirmPassword = Crypto.HmacSHA256(confirmPassword)
-        let account = NSLocalStorage.getAccount()
-
-        if(confirmPassword !== account.accountKey) {
-          $("#reset-confirm-model").modal('hide')
+        let walletJson = NSLocalStorage.getWallet()
+        let wallet = nknWallet.loadJsonWallet(walletJson, confirmPassword.trim())
+        if(wallet instanceof nknWallet.nknWalletError) {
           alert(this.$t('nsMain.resetdlg.alertInfo.wrongPass'))
           return
         }
 
-        Http.resetShell(this, account.requestKey, function () {
+        Http.resetShell(this, NSLocalStorage.getReqKey(), function () {
+          NSLocalStorage.clear()
           window.location.reload()
         }, function () {
           alert(this.$t('nsMain.resetdlg.alertInfo.success'))
@@ -373,7 +388,7 @@
         this.$store.commit(nsNamespace.GLOBAL + "/updatePageLoaded", false)
 
         let _this = this
-        Http.startMining(this, this.accountInfo.requestKey,
+        Http.startMining(this, NSLocalStorage.getReqKey(),
           function () {
             setTimeout(function () {
               _this.$store.commit(nsNamespace.GLOBAL + "/updatePageLoaded", true)
@@ -392,7 +407,7 @@
         this.$store.commit(nsNamespace.GLOBAL + "/updatePageLoaded", false)
 
         let _this = this
-        Http.stopMining(this, this.accountInfo.requestKey,
+        Http.stopMining(this, NSLocalStorage.getReqKey(),
           function () {
             setTimeout(function () {
               _this.$store.commit(nsNamespace.GLOBAL + "/updatePageLoaded", true)

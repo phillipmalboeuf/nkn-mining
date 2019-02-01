@@ -30,35 +30,28 @@ function setWallet(scope, walletInfo, reqKey, success, fail) {
   let setWalletData = new RequestData()
 
   setWalletData.setData(walletInfo)
-  return axiosRequest(scope, '/set/wallet', setWalletData.encryptedData(reqKey, false), success, fail)
-}
-
-function setAccount(scope, accountInfo, sn, success, fail) {
-  let setAccountData = new RequestData()
-
-  setAccountData.setData(accountInfo)
-  return axiosRequest(scope, '/set/account', setAccountData.encryptedData(sn), success, fail)
+  return axiosRequest(scope, '/set/wallet', setWalletData.encryptedData(reqKey), success, fail)
 }
 
 function startMining(scope, reqKey, success, fail) {
   let startMiningData = new RequestData()
 
   startMiningData.setData("start")
-  return axiosRequest(scope, '/start/node', startMiningData.encryptedData(reqKey, false), success, fail)
+  return axiosRequest(scope, '/start/node', startMiningData.encryptedData(reqKey), success, fail)
 }
 
 function stopMining(scope, reqKey, success, fail) {
   let stopMiningData = new RequestData()
 
   stopMiningData.setData("stop")
-  return axiosRequest(scope, '/stop/node', stopMiningData.encryptedData(reqKey, false), success, fail)
+  return axiosRequest(scope, '/stop/node', stopMiningData.encryptedData(reqKey), success, fail)
 }
 
 function resetShell(scope, reqKey, success, fail) {
   let resetShellData = new RequestData()
 
  resetShellData.setData("resetShell")
-  return axiosRequest(scope, '/reset/shell', resetShellData.encryptedData(reqKey, false), success, fail)
+  return axiosRequest(scope, '/reset/shell', resetShellData.encryptedData(reqKey), success, fail)
 }
 
 function getRewardsList(scope, address, height, success, fail) {
@@ -92,12 +85,10 @@ function login(scope, data, pwd, success, fail) {
 export default {
   getStatus,
   getVersion,
-  setAccount,
   setWallet,
   startMining,
   stopMining,
   resetShell,
   login,
-
   getRewardsList,
 }

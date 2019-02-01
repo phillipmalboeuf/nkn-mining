@@ -16,53 +16,44 @@ const (
 )
 
 const (
-	SETUP_STEP_INIT = iota
-	SETUP_STEP_CREATE_ACCOUNT
-	SETUP_STEP_GEN_WALLET
+	SETUP_STEP_GEN_WALLET = iota
 	SETUP_STEP_SUCCESS
 	SETUP_NODE_UPDATE
 )
 
+var IsRemote = false
 var saveMutex = &sync.Mutex{}
 
 func InitSetupInfo()  {
 	NKNSetupInfo.Load()
 
-	if SETUP_STEP_CREATE_ACCOUNT == NKNSetupInfo.CurrentStep {
-		fmt.Println("serial number(sn): " + NKNSetupInfo.SerialNumber)
-		return
-	}
+	if SETUP_STEP_GEN_WALLET == NKNSetupInfo.CurrentStep {
+		if "" == NKNSetupInfo.SerialNumber {
+			sn := "NKN-" + uuid.NewUUID().String()
+			NKNSetupInfo.SerialNumber = sn
+		}
 
-	if SETUP_STEP_INIT != NKNSetupInfo.CurrentStep {
-		if SETUP_STEP_CREATE_ACCOUNT != NKNSetupInfo.CurrentStep {
-			if common.IsWindowsOS() {
-				fmt.Println("NKNMining start up")
-			} else {
-				fmt.Println("NKNMining start up in background")
+		if nil == NKNSetupInfo.Save() {
+			if IsRemote {
+				fmt.Println("serial number(sn): " + NKNSetupInfo.SerialNumber)
 			}
+		} else {
+			common.Log.Fatal("initialization NKN setup info failed!")
+		}
+		return
+	} else {
+		if common.IsWindowsOS() {
+			fmt.Println("NKNMining start up")
+		} else {
+			fmt.Println("NKNMining start up in background")
 		}
 		return
 	}
-
-	if "" == NKNSetupInfo.SerialNumber {
-		sn := "NKN-" + uuid.NewUUID().String()
-		NKNSetupInfo.SerialNumber = sn
-	}
-
-	NKNSetupInfo.CurrentStep = SETUP_STEP_CREATE_ACCOUNT
-	if nil == NKNSetupInfo.Save() {
-		fmt.Println("serial number(sn): " + NKNSetupInfo.SerialNumber)
-	} else {
-		common.Log.Fatal("initialization NKN setup info failed!")
-	}
-
-	NKNSetupInfo.Save()
 }
 
 type SetupInfo struct {
 	SerialNumber string
 	CurrentStep	int
-	Account string
 	Key string
 	WKey string
 	BinVersion string
@@ -76,17 +67,17 @@ var NKNSetupInfo = &SetupInfo{
 }
 
 func (s *SetupInfo) Reset()  {
-	NKNSetupInfo = &SetupInfo{SerialNumber: NKNSetupInfo.SerialNumber, CurrentStep: SETUP_STEP_CREATE_ACCOUNT}
+	NKNSetupInfo = &SetupInfo{SerialNumber: NKNSetupInfo.SerialNumber, CurrentStep: SETUP_STEP_GEN_WALLET}
 	NKNSetupInfo.Save()
 }
 
 func (s *SetupInfo) GetRequestKey() string {
-	return s.SerialNumber + s.Key
+	return s.SerialNumber
 }
 
 
 func (s *SetupInfo) GetWalletKey() string {
-	return s.SerialNumber + s.Key + s.Account
+	return s.SerialNumber + s.Key
 }
 
 func (s *SetupInfo) Load()  {

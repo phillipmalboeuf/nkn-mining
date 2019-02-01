@@ -1,7 +1,6 @@
 <template>
     <div class="nkn-setup-page nkn-card-shadow nkn-after-clear">
         <div class="nkn-create-account-panel">
-            <label class="nkn-page-title-label">{{$t("nsShowWallet.titleLabel")}}</label>
             <h1 class="nkn-page-title text-main-blue">{{$t("nsShowWallet.title")}}</h1>
             <div class="wallet-info">
                 <div class="wallet-private-key">

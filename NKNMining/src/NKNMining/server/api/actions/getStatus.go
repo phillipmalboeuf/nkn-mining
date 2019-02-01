@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"NKNMining/status"
 	"NKNMining/task"
+	"NKNMining/storage"
 )
 
 var GetStatusAPI IRestfulAPIAction = &getStatus{}
@@ -29,7 +30,8 @@ func (g *getStatus) Action(ctx *gin.Context) {
 		if status.IsChainDataDownloading() {
 			downloadingProgress = task.GetChainDataDownloadProgress()
 		}
-		response.Success(map[string] interface{} {
+		fromLocal := ctx.Params.ByName(apiServerConsts.PARAM_FROM_LOCAL)
+		result := map[string] interface{} {
 			"chainDataDownloadingProgress": downloadingProgress,
 			"shellStatus": nsStatus,
 			"blockHeight": task.CurrentHeight.Result,
@@ -37,7 +39,13 @@ func (g *getStatus) Action(ctx *gin.Context) {
 			"syncStatus": task.NodeState.Result.SyncState,
 			"nodeInfo": task.NodeState.Result,
 			"neighbor": task.NodeNeighbor.Result,
-		})
+		}
+
+		if "" != fromLocal {
+			result["sn"] = storage.NKNSetupInfo.SerialNumber
+		}
+
+		response.Success(result)
 	}
 
 	return

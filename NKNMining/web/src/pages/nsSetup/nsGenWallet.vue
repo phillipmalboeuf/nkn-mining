@@ -1,9 +1,10 @@
 <template>
     <div class="nkn-setup-page nkn-card-shadow nkn-after-clear">
         <div class="nkn-create-account-panel">
-            <label class="nkn-page-title-label">{{$t("nsGenWallet.titleLabel")}}</label>
             <h1 class="nkn-page-title text-main-blue">{{$t("nsGenWallet.title")}}</h1>
-            <ns-input-item v-for="(inputItem, idx) in inputs" :key="idx" :config="inputItem" />
+            <div v-for="(inputItem, idx) in inputs" :key="idx">
+                <ns-input-item v-if="showInput(idx)" :config="inputItem" />
+            </div>
             <div class="setup-button nkn-after-clear nkn-wallet-setup-button-panel">
                 <a class="nkn-link-load-wallet" @click="toLoadWallet">{{$t("nsGenWallet.link")}}</a>
                 <button class="nkn-normal-btn" type="button" @click="nextStep">{{$t("nsGenWallet.nextStepbtn")}}</button>
@@ -13,6 +14,7 @@
             <img class="nkn-wall-background" :src="'./static/img/wallpaper.png'"/>
             <img class="nkn-wall-pad" :src="'./static/img/wallpad.png'"/>
         </div>
+        <div style="display: none">{{lang}}</div>
         <ns-loading v-if="!this.$store.state.global.pageLoaded"/>
     </div>
 </template>
@@ -33,13 +35,13 @@
       NsLoading,
       NsInputItem
     },
-    mixins:[LangMix],
     name: "ns-gen-wallet",
     mounted() {
       loadPage.call(this)
     },
     data: function () {
       return {
+        showSN: false,
         inputs: {
           password: {
             inputId: inputIdPrefix() + "password",
@@ -60,11 +62,28 @@
             maxSize: 20,
             errorInfo: '',
           },
+
+          sn: {
+            inputId: inputIdPrefix() + "serialNumber",
+            title: this.$t('nsInput.sn.title'),
+            placeholder: this.$t('nsInput.sn.placeholder'),
+            hasAppend: true,
+            inputType: 'text',
+            maxSize: 40,
+            errorInfo: '',
+          }
         }
       }
     },
 
     methods: {
+      showInput(idx) {
+        if('sn' === idx) {
+          return this.showSN
+        }
+
+        return true
+      },
       getWalletPassword() {
         let $this = $(this.$el)
 
@@ -74,7 +93,13 @@
         }
       },
 
-      walletDataGen(accountInfo) {
+      getSNInput() {
+        let $this = $(this.$el)
+
+        return $this.find('.' + inputIdPrefix() + 'serialNumber').val()
+      },
+
+      walletDataGen(encKey) {
         let verifyFailed = false
         let walletPassword = this.getWalletPassword()
         this.inputs.password.errorInfo = ''
@@ -100,7 +125,7 @@
           return null
         }
 
-        let key = Crypto.AESEnc(walletPassword.password, accountInfo.walletKey, false)
+        let key = Crypto.AESEnc(walletPassword.password, encKey)
 
         return {
           reqData: {
@@ -117,10 +142,20 @@
       },
 
       nextStep() {
-        let accountInfo = NSLocalStorage.getAccount()
-        let walletData = this.walletDataGen(accountInfo)
+        let encKey = NSLocalStorage.getReqKey() || this.getSNInput()
 
-        Http.setWallet(this, walletData.reqData, accountInfo.requestKey, function () {
+        if(!encKey || encKey.length !== 40) {
+          this.inputs.sn.errorInfo = this.$t('nsInput.sn.errorInfo')
+          return
+        }
+
+        let walletData = this.walletDataGen(encKey)
+        if(null === walletData) {
+          return
+        }
+
+        Http.setWallet(this, walletData.reqData, encKey, function () {
+          NSLocalStorage.setReqKey(encKey)
           NSLocalStorage.setWallet(walletData.reqData.Wallet, walletData.wallet.address)
           this.$store.commit(nsNamespace.GLOBAL + "/updateWallet", walletData.wallet)
           this.$router.push({name: nsNamespace.SETUP.SHOW_WALLET})
@@ -129,7 +164,7 @@
         })
       }
     },
-    watch: {
+    computed: {
       lang() {
         this.inputs = {
           password: {
@@ -150,10 +185,21 @@
             inputType: 'password',
             maxSize: 20,
             errorInfo: '',
+          },
+
+          sn: {
+            inputId: inputIdPrefix() + "serialNumber",
+            title: this.$t('nsInput.sn.title'),
+            placeholder: this.$t('nsInput.sn.placeholder'),
+            hasAppend: false,
+            inputType: 'text',
+            maxSize: 40,
+            errorInfo: '',
           }
         }
+        return this.$i18n.locale
       }
-    }
+    },
   }
 </script>
 

@@ -17,15 +17,17 @@ func InitNodeContainers() {
 	shellWorkPath := common.GetCurrentDirectory()
 	nodeWorkPath := shellWorkPath + "/bin"
 	nodeApp := nodeWorkPath + "/nknd"
+	nodeVersionApp := nodeWorkPath + "/nknc"
 	if common.IsWindowsOS() {
 		nodeApp += ".exe"
+		nodeVersionApp += ".exe"
 	}
 
 	if !Node.InitEnvironment(nodeApp, nodeWorkPath) {
 		common.Log.Fatal("initialization of NKN node failed!")
 	}
 
-	if !NodeStatus.InitEnvironment(nodeApp, nodeWorkPath) {
+	if !NodeStatus.InitEnvironment(nodeVersionApp, nodeWorkPath) {
 		common.Log.Fatal("initialization of NKN node status getter failed!")
 	}
 }
@@ -62,7 +64,7 @@ func (c *NodeContainer) buildCommand(args []string, input string) (cmd *exec.Cmd
 		return
 	}
 
-	_, err = stdin.Write([]byte(input))
+	_, err = stdin.Write([]byte(input + "\r\n"))
 	if nil != err {
 		common.Log.Error(err)
 		return
@@ -101,6 +103,8 @@ func (c *NodeContainer) AsyncRun(args []string, input string) (cmd *exec.Cmd, er
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 
+
+	common.Log.Error("async run")
 	manuallyStopped = false
 	cmd, err = c.buildCommand(args, input)
 	if nil != err {
@@ -109,14 +113,19 @@ func (c *NodeContainer) AsyncRun(args []string, input string) (cmd *exec.Cmd, er
 
 	go func() {
 		for  {
+			common.Log.Error("run start")
 			cmd.Run()
 			cmd.Wait()
+			common.Log.Error("run end")
 
 			c.mutex.Lock()
 			if nil == c.controller {
 				c.mutex.Unlock()
+				common.Log.Error("clean upped")
 				break
 			}
+
+			common.Log.Error("clean up")
 
 			c.controller = nil
 			cmd, _ = c.buildCommand(args, input)

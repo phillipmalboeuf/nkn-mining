@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"NKNMining/storage"
 	"NKNMining/crypto"
+	"NKNMining/container"
 )
 
 const resetShellCmd = "resetShell"
@@ -22,6 +23,7 @@ func (s *resetShellAPI) URI(serverURI string) string {
 }
 
 func (s *resetShellAPI) Action(ctx *gin.Context) {
+
 	response := apiServerResponse.New(ctx)
 
 	inputJson, err := s.ExtractInput(ctx)
@@ -49,6 +51,7 @@ func (s *resetShellAPI) Action(ctx *gin.Context) {
 		return
 	}
 
+	container.Node.Stop()
 	storage.NKNSetupInfo.Reset()
 
 	response.Success(nil)

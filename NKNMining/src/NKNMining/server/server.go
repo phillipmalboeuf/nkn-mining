@@ -8,6 +8,7 @@ import (
 	"os"
 	"io"
 	"NKNMining/common"
+	"NKNMining/storage"
 )
 
 func startMutexServer() {
@@ -31,8 +32,11 @@ func Start() {
 
 	webServer.InitRouters(router, serviceBaseURI, webDir)
 	apiServer.InitRouters(router, serviceBaseURI)
-
-	go router.Run(":" + config.ShellConfig.ServerPort)
+	if storage.IsRemote {
+		go router.Run(":" + config.ShellConfig.ServerPort)
+	} else {
+		go router.Run("127.0.0.1:" + config.ShellConfig.ServerPort)
+	}
 
 	startMutexServer()
 }

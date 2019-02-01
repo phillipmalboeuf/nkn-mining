@@ -45,13 +45,10 @@ func statusFromNodeContainer(status *int) (ret bool) {
 }
 
 func GetServerStatus() (status int, errInfo string) {
-	status = common.NS_STATUS_CTEATE_ACCOUNT
+	status = common.NS_STATUS_GEN_WALLET
 	errInfo = ""
 
 	switch storage.NKNSetupInfo.CurrentStep {
-	case storage.SETUP_STEP_CREATE_ACCOUNT:
-		break
-
 	case storage.SETUP_STEP_GEN_WALLET:
 		status = common.NS_STATUS_GEN_WALLET
 		break

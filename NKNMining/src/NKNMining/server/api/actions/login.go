@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"NKNMining/storage"
 	"NKNMining/crypto"
+	"encoding/hex"
 )
 
 var LoginAPI IRestfulAPIAction = &login{}
@@ -26,8 +27,7 @@ func (l *login) URI(serverURI string) string {
 
 func (l *login) Action(ctx *gin.Context) {
 	response := apiServerResponse.New(ctx)
-	if storage.SETUP_STEP_SUCCESS != storage.NKNSetupInfo.CurrentStep &&
-	   storage.SETUP_STEP_GEN_WALLET != storage.NKNSetupInfo.CurrentStep {
+	if storage.SETUP_STEP_GEN_WALLET == storage.NKNSetupInfo.CurrentStep {
 		response.BadRequest("invalid request!")
 		return
 	}
@@ -45,7 +45,8 @@ func (l *login) Action(ctx *gin.Context) {
 		return
 	}
 
-	loginInfoJsonStr, err := crypto.AesDecrypt(basicData.Data, storage.NKNSetupInfo.Account + storage.NKNSetupInfo.Key)
+	decKey := crypto.BuildPwd(storage.NKNSetupInfo.WKey)
+	loginInfoJsonStr, err := crypto.AesDecrypt(basicData.Data, hex.EncodeToString(decKey))
 	if nil != err {
 		response.BadRequest("invalid request data!")
 		return
@@ -65,14 +66,12 @@ func (l *login) Action(ctx *gin.Context) {
 		return
 	}
 
-
 	wallet := &storage.Wallet{}
 	wallet.Load()
 	walletStrBytes, err := json.Marshal(wallet)
 
 	responseData, _ := json.Marshal(map[string] string {
 		"Nonce": loginInfo.Nonce,
-		"SN": storage.NKNSetupInfo.SerialNumber,
 		"Wallet": string(walletStrBytes),
 	})
 

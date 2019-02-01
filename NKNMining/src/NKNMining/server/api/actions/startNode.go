@@ -66,7 +66,7 @@ func (s *startNodeAPI) Action(ctx *gin.Context) {
 		return
 	}
 
-	_, err = container.Node.AsyncRun([]string{"-p", wKey, "--no-check-port"}, "")
+	_, err = container.Node.AsyncRun([]string{"--no-check-port"}, wKey)
 	if nil != err {
 		response.InternalServerError("start node failed!")
 		return

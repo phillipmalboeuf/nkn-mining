@@ -1,9 +1,10 @@
 <template>
     <div class="nkn-setup-page nkn-card-shadow nkn-after-clear">
         <div class="nkn-create-account-panel">
-            <label class="nkn-page-title-label">{{$t("nsLoadWallet.titleLabel")}}</label>
             <h1 class="nkn-page-title text-main-blue">{{$t("nsLoadWallet.title")}}</h1>
-            <ns-input-item v-for="(inputItem, idx) in inputs" :key="idx" :config="inputItem" />
+            <div  v-for="(inputItem, idx) in inputs" :key="idx">
+                <ns-input-item v-if="showInput(idx)" :config="inputItem" />
+            </div>
             <div class="nkn-wallet-select-button">{{$t("nsLoadWallet.upload")}}</div>
             <input class="nkn-wallet-to-load-file-input" type="file" accept=".dat"
                    @change="walletSelected"/>
@@ -17,7 +18,7 @@
             <img class="nkn-wall-background" :src="'./static/img/wallpaper.png'"/>
             <img class="nkn-wall-pad" :src="'./static/img/wallpad.png'"/>
         </div>
-
+        <div style="display: none">{{lang}}</div>
         <ns-loading v-if="!this.$store.state.global.pageLoaded || this.blockUI"/>
     </div>
 </template>
@@ -68,6 +69,7 @@
         walletJson: '',
         wallet: null,
         blockUI: false,
+        showSN: false,
         inputs: {
           wallet: {
             inputId: inputIdPrefix() + "wallet-to-load",
@@ -88,11 +90,63 @@
             maxSize: 20,
             errorInfo: '',
           },
+
+          sn: {
+            inputId: inputIdPrefix() + "serialNumber",
+            title: this.$t('nsInput.sn.title'),
+            placeholder: this.$t('nsInput.sn.placeholder'),
+            hasAppend: false,
+            inputType: 'text',
+            maxSize: 40,
+            errorInfo: '',
+          }
         }
       }
     },
+    computed: {
+      lang() {
+        this.inputs = {
+          wallet: {
+            inputId: inputIdPrefix() + "wallet-to-load",
+            title: this.$t('nsInput.wallet.title'),
+            placeholder: this.$t('nsInput.wallet.placeholder'),
+            hasAppend: false,
+            inputType: 'text',
+            maxSize: 20,
+            errorInfo: '',
+          },
 
+          password: {
+            inputId: inputIdPrefix() + "password",
+            title: this.$t('nsInput.walletPassword.title'),
+            placeholder: this.$t('nsInput.walletPassword.placeholder'),
+            hasAppend: false,
+            inputType: 'password',
+            maxSize: 20,
+            errorInfo: '',
+          },
+
+          sn: {
+            inputId: inputIdPrefix() + "serialNumber",
+            title: this.$t('nsInput.sn.title'),
+            placeholder: this.$t('nsInput.sn.placeholder'),
+            hasAppend: false,
+            inputType: 'text',
+            maxSize: 40,
+            errorInfo: '',
+          }
+        }
+        return this.$i18n.locale
+      }
+    },
     methods: {
+      showInput(idx) {
+        if('sn' === idx) {
+          return this.showSN
+        }
+
+        return true
+      },
       walletSelected() {
         let $this = $(this.$el)
 
@@ -120,7 +174,13 @@
         }
       },
 
-      walletDataGen(accountInfo, setWallet) {
+      getSNInput() {
+        let $this = $(this.$el)
+
+        return $this.find('.' + inputIdPrefix() + 'serialNumber').val()
+      },
+
+      walletDataGen(encKey, setWallet) {
         let $this = $(this.$el)
 
         let walletPassword = this.getWalletPassword()
@@ -141,15 +201,12 @@
           _this.walletJson = reader.result
           _this.wallet = nknWallet.loadJsonWallet(_this.walletJson, walletPassword.password)
 
-
-          console.log(_this.walletJson)
-          console.log(_this.wallet)
           if (_this.wallet instanceof nknWallet.nknWalletError) {
-            _this.inputs.password.errorInfo = this.$t('nsInput.walletPassword.errorInfo')
+            _this.inputs.password.errorInfo = _this.$t('nsInput.walletPassword.errorInfo')
             return
           }
 
-          let key = Crypto.AESEnc(walletPassword.password, accountInfo.walletKey, false)
+          let key = Crypto.AESEnc(walletPassword.password, encKey)
 
           setWallet({
             reqData: {
@@ -165,11 +222,17 @@
       },
 
       nextStep() {
-        let accountInfo = NSLocalStorage.getAccount()
+        let encKey = NSLocalStorage.getReqKey() || this.getSNInput()
+        if(!encKey || encKey.length !== 40) {
+          this.inputs.sn.errorInfo = this.$t('nsInput.sn.errorInfo')
+          return
+        }
+
         let _this = this
-        this.walletDataGen(accountInfo, function (walletData) {
+        this.walletDataGen(encKey, function (walletData) {
           _this.blockUI = true
-          Http.setWallet(this, walletData.reqData, accountInfo.requestKey, function () {
+          Http.setWallet(this, walletData.reqData, encKey, function () {
+            NSLocalStorage.setReqKey(encKey)
             NSLocalStorage.setWallet(walletData.reqData.Wallet, walletData.wallet.address)
             _this.$store.commit(nsNamespace.GLOBAL + "/updateWallet", walletData.wallet)
             _this.$router.push({name: nsNamespace.SETUP.SHOW_WALLET})
@@ -181,31 +244,6 @@
         })
       }
     },
-    watch: {
-      lang () {
-        this.inputs = {
-          wallet: {
-            inputId: inputIdPrefix() + "wallet-to-load",
-            title: this.$t('nsInput.wallet.title'),
-            placeholder: this.$t('nsInput.wallet.placeholder'),
-            hasAppend: false,
-            inputType: 'text',
-            maxSize: 20,
-            errorInfo: '',
-          },
-
-          password: {
-            inputId: inputIdPrefix() + "password",
-            title: this.$t('nsInput.walletPassword.title'),
-            placeholder: this.$t('nsInput.walletPassword.placeholder'),
-            hasAppend: false,
-            inputType: 'password',
-            maxSize: 20,
-            errorInfo: '',
-          }
-        }
-      }
-    }
   }
 </script>
 

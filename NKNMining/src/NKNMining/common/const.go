@@ -1,6 +1,6 @@
 package common
 
-const NS_VERSION  = "NKNMining v0.0.10"
+const NS_VERSION  = "NKNMining v0.2.0"
 const API_VERSION  = "NKNMining.v1"
 
 const (
@@ -9,7 +9,6 @@ const (
 )
 
 const (
-	NS_STATUS_CTEATE_ACCOUNT = 0
 	NS_STATUS_GEN_WALLET = 1
 	NS_STATUS_NODE_RUNNING = 2
 	NS_STATUS_NODE_EXITED = 3

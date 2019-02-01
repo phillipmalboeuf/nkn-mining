@@ -49,15 +49,6 @@ func doBinUpdate(toVersion string, url string) (err error) {
 		return
 	}
 
-	defer func() {
-		//if storage.SETUP_STEP_CREATE_ACCOUNT != storage.NKNSetupInfo.CurrentStep ||
-		//   storage.SETUP_STEP_GEN_WALLET != storage.NKNSetupInfo.CurrentStep {
-		//	return
-		//}
-		//storage.NKNSetupInfo.CurrentStep = currentStep
-		//storage.NKNSetupInfo.Save()
-	}()
-
 	if common.NknBinExists() {
 		if nknBinFirstUpdate && storage.SETUP_NODE_UPDATE == storage.NKNSetupInfo.CurrentStep {
 			currentStep = storage.SETUP_STEP_SUCCESS
@@ -66,17 +57,14 @@ func doBinUpdate(toVersion string, url string) (err error) {
 		binRunStatus, errInfo := status.GetServerStatus()
 
 		if !nknBinNeedUpdate(toVersion) {
-			if 	storage.NKNSetupInfo.CurrentStep == storage.SETUP_STEP_INIT ||
-			 	storage.NKNSetupInfo.CurrentStep == storage.SETUP_STEP_GEN_WALLET ||
-				storage.NKNSetupInfo.CurrentStep == storage.SETUP_STEP_CREATE_ACCOUNT {
+			if storage.NKNSetupInfo.CurrentStep == storage.SETUP_STEP_GEN_WALLET  {
 				return
 			}
 			currentStep = storage.SETUP_STEP_SUCCESS
 			return
 		}
 
-		if 	common.NS_STATUS_CTEATE_ACCOUNT == binRunStatus ||
-			common.NS_STATUS_GEN_WALLET == binRunStatus ||
+		if 	common.NS_STATUS_GEN_WALLET == binRunStatus ||
 			"" != errInfo {
 			return
 		}
@@ -87,15 +75,19 @@ func doBinUpdate(toVersion string, url string) (err error) {
 		}
 	}
 
-	if  storage.SETUP_STEP_INIT != currentStep &&
-		storage.SETUP_STEP_CREATE_ACCOUNT != currentStep &&
-		storage.SETUP_STEP_GEN_WALLET != currentStep {
+	if storage.SETUP_STEP_GEN_WALLET != currentStep {
 		storage.NKNSetupInfo.CurrentStep = storage.SETUP_NODE_UPDATE
 		storage.NKNSetupInfo.Save()
+
+		defer func() {
+			storage.NKNSetupInfo.CurrentStep = storage.SETUP_STEP_SUCCESS
+			storage.NKNSetupInfo.Save()
+		}()
 	}
 
 	basicPath := common.GetCurrentDirectory() + nkn_bin_file_path
 	unzippedBin := basicPath + "/" +runtime.GOOS + "-" + runtime.GOARCH + "/nknd"
+	unzippedNKNCBin := basicPath + "/" +runtime.GOOS + "-" + runtime.GOARCH + "/nknc"
 	fileName := runtime.GOOS + "-" + runtime.GOARCH + "." + toVersion + ".zip"
 	fullName := basicPath + "/" + fileName
 	err = nknReleaseQuery.DownloadNKN(url, fullName, nil)
@@ -112,8 +104,10 @@ func doBinUpdate(toVersion string, url string) (err error) {
 
 	if common.IsWindowsOS() {
 		err = mvNKNBin(unzippedBin, basicPath + "/nknd.exe")
+		err = mvNKNBin(unzippedNKNCBin, basicPath + "/nknc.exe")
 	} else {
 		err = mvNKNBin(unzippedBin, basicPath + "/nknd")
+		err = mvNKNBin(unzippedNKNCBin, basicPath + "/nknc")
 	}
 	if nil != err {
 		common.Log.Error("move bin file failed: ", err)
@@ -134,7 +128,7 @@ func doBinUpdate(toVersion string, url string) (err error) {
 			return err
 		}
 
-		_, err = container.Node.AsyncRun([]string{"-p", wKey}, "")
+		_, err = container.Node.AsyncRun([]string{"--no-check-port"}, wKey)
 		if nil != err {
 			common.Log.Error(err)
 			return err

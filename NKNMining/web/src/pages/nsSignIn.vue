@@ -3,7 +3,9 @@
         <div class="nkn-sign-in-panel">
             <label class="nkn-page-title-label">{{$t("nsSignIn.titleLabel")}}</label>
             <h1 class="nkn-page-title text-main-blue">{{$t("nsSignIn.title")}}</h1>
-            <ns-input-item  v-for="(inputItem, idx) in inputs" :key="idx" :config="inputItem" />
+            <div v-for="(inputItem, idx) in inputs" :key="idx">
+                <ns-input-item v-if="showInput(idx)" :config="inputItem" />
+            </div>
             <div class="nkn-sign-in">
                 <button class="nkn-normal-btn sign-in-button" type="button" @click="signIn">{{$t("nsSignIn.signInbtn")}}</button>
             </div>
@@ -12,6 +14,7 @@
             <img class="nkn-wall-background" :src="'./static/img/wallpaper.png'"/>
             <img class="nkn-wall-pad" :src="'./static/img/wallpad.png'"/>
         </div>
+        <div style="display: none">{{lang}}</div>
         <ns-loading v-if="!this.$store.state.global.pageLoaded"/>
     </div>
 </template>
@@ -21,7 +24,6 @@
   import NsLoading from "../components/nsLoading"
   import NSLocalStorage from "../js/nsLocalStorage"
   import Crypto from "../js/crypto/algorithm"
-  import Is from "is_js"
   import Mathjs from "mathjs"
   import Http from "../js/network/nsHttp"
   import LangMix from "../js/mixin/lang.js"
@@ -46,6 +48,13 @@
       }
     },
     methods: {
+      showInput(idx) {
+        if('sn' === idx) {
+          return this.showSN
+        }
+
+        return true
+      },
       array2HexString(bytes) {
         return Array.from(bytes, function(byte) {
           return ('0' + (byte & 0xFF).toString(16)).slice(-2)
@@ -64,13 +73,7 @@
       accountDataCollect() {
         let verifyFailed = false
         let accountInfo = this.getAccountData()
-        this.inputs.account.errorInfo = ''
         this.inputs.password.errorInfo = ''
-
-        if(!Is.alphaNumeric(accountInfo.account)) {
-          verifyFailed = true
-          this.inputs.account.errorInfo = this.$t('nsInput.account.errorInfo')
-        }
 
         if(accountInfo.password.length < 8) {
           verifyFailed = true
@@ -80,23 +83,36 @@
         return verifyFailed ? null : accountInfo
       },
 
+      getSNInput() {
+        let $this = $(this.$el)
+
+        return $this.find('.' + inputIdPrefix() + 'serialNumber').val()
+      },
+
       signIn() {
         let accountInfo = this.accountDataCollect()
         if(null === accountInfo) {
           return
         }
 
+        let encKey = NSLocalStorage.getReqKey() || this.getSNInput()
+        if(!encKey || encKey.length !== 40) {
+          this.inputs.sn.errorInfo = this.$t('nsInput.sn.errorInfo')
+          return
+        }
+
+        let loginKey = Crypto.AESEnc(accountInfo.password, encKey)
+        loginKey = Crypto.HmacSHA256(loginKey, loginKey)
+
         let loginData = {
           nonce : this.array2HexString(Mathjs.random([16], 0, 255)),
           randomKey : this.array2HexString(Mathjs.random([32], 0, 255)),
         }
 
-        let reqKey = accountInfo.account + Crypto.HmacSHA256(accountInfo.password)
-
         Http.login(
           this,
           loginData,
-          reqKey,
+          loginKey,
           function (data) {
             let key = loginData.nonce + loginData.randomKey
             let responseData = Crypto.AESDec(data.Data, key)
@@ -109,18 +125,11 @@
 
             let walletJsonObj = JSON.parse(responseData.Wallet)
 
-            let accountKey = Crypto.HmacSHA256(accountInfo.password)
-            let requestKey = Crypto.HmacSHA256(responseData.SN + accountKey)
-            let walletKey = Crypto.HmacSHA256(responseData.SN + accountKey + accountInfo.account)
-
-            NSLocalStorage.setLogin(accountInfo.account,
+            NSLocalStorage.setReqKey(encKey)
+            NSLocalStorage.setLogin(
               responseData.Wallet,
               walletJsonObj.Address,
-              {
-                account: accountKey,
-                req: requestKey,
-                wallet: walletKey,
-              })
+            )
 
             this.$router.push({name: nsNamespace.MAIN})
           },
@@ -132,16 +141,8 @@
     },
     data: function () {
       return {
+        showSN: false,
         inputs: {
-          account: {
-            inputId: inputIdPrefix() + "account",
-            title: this.$t('nsInput.account.title'),
-            placeholder: this.$t('nsInput.account.placeholder'),
-            hasAppend: false,
-            inputType: 'text',
-            maxSize: 20,
-            errorInfo: '',
-          },
           password: {
             inputId: inputIdPrefix() + "password",
             title: this.$t('nsInput.password.title'),
@@ -149,23 +150,24 @@
             hasAppend: true,
             inputType: 'password',
             maxSize: 20,
+            errorInfo: '',
+          },
+
+          sn: {
+            inputId: inputIdPrefix() + "serialNumber",
+            title: this.$t('nsInput.sn.title'),
+            placeholder: this.$t('nsInput.sn.placeholder'),
+            hasAppend: true,
+            inputType: 'text',
+            maxSize: 40,
             errorInfo: '',
           }
         }
       }
     },
-    watch: {
-      lang(){
+    computed: {
+      lang() {
         this.inputs = {
-          account: {
-            inputId: inputIdPrefix() + "account",
-            title: this.$t('nsInput.account.title'),
-            placeholder: this.$t('nsInput.account.placeholder'),
-            hasAppend: false,
-            inputType: 'text',
-            maxSize: 20,
-            errorInfo: '',
-          },
           password: {
             inputId: inputIdPrefix() + "password",
             title: this.$t('nsInput.password.title'),
@@ -174,10 +176,22 @@
             inputType: 'password',
             maxSize: 20,
             errorInfo: '',
+          },
+
+          sn: {
+            inputId: inputIdPrefix() + "serialNumber",
+            title: this.$t('nsInput.sn.title'),
+            placeholder: this.$t('nsInput.sn.placeholder'),
+            hasAppend: true,
+            inputType: 'text',
+            maxSize: 40,
+            errorInfo: '',
           }
         }
+
+        return this.$i18n.locale
       }
-    }
+    },
   }
 </script>
 

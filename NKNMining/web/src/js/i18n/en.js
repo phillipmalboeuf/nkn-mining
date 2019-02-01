@@ -8,6 +8,7 @@ module.exports = {
   },
   mark: 'NKN',
   nsNav: {
+    clearCache: 'Clear cache',
     signOut: 'Sign out',
     resetNodeMining: 'Reset @:mark mining'
   },
@@ -22,12 +23,12 @@ module.exports = {
       errorInfo: 'Alphanumeric only!'
     },
     password: {
-      title: 'Your account password',
+      title: 'Your wallet password',
       placeholder: '8-20 characters',
       errorInfo: 'Please input 8-20 characters'
     },
     rePassword: {
-      title: 'Confirm account password',
+      title: 'Confirm password',
       placeholder: '8-20 characters',
       errorInfo: 'The password for the two input is inconsistent!'
     },
@@ -45,7 +46,7 @@ module.exports = {
       title: 'Wallet password',
       placeholder: 'password ot the wallet to load',
       errorInfo: 'Please check if the password matches the wallet.'
-    }
+    },
   },
   nsSignIn: {
     titleLabel: 'Welcome to',
@@ -65,6 +66,7 @@ module.exports = {
         stopfail: 'stop mining failed. please check log on the server.'
       },
       nodeStatus:{
+        relayCount: 'Message relayed by node: {relayCount}',
         prefix: 'Node status: ',
         init: '@:nsMain.node.nodeStatus.prefix sync ...',
         chainDownloading: '@:nsMain.node.nodeStatus.prefix downloading NKN node program.',
@@ -80,7 +82,7 @@ module.exports = {
         init: 'Querying version ...'
       },
       NKNBlockHeight: '@:mark network block height:',
-      myBlockHeight: 'my block height:'
+      myBlockHeight: 'Node block height:'
     },
     wallet: {
       title: 'Wallet',
@@ -129,19 +131,12 @@ module.exports = {
       }
     }
   },
-  nsCreateAccount: {
-    titleLabel: 'setup - step 1',
-    title: 'Create account',
-    nextStepbtn: 'NEXT'
-  },
   nsGenWallet: {
-    titleLabel: 'setup - step 2',
     title: 'Generate wallet',
     link: 'Load wallet',
     nextStepbtn: 'NEXT'
   },
   nsLoadWallet: {
-    titleLabel: 'setup - step 2',
     title: 'Load wallet',
     upload: 'Select file',
     link: 'Generate wallet',
@@ -149,7 +144,6 @@ module.exports = {
     netWorkError: 'Network error, please try again later.'
   },
   nsShowWallet: {
-    titleLabel: 'setup - step 3',
     title: 'Download wallet',
     privateKey: 'Private key',
     address: 'Wallet address',

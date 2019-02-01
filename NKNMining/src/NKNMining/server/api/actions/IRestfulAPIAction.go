@@ -22,7 +22,7 @@ type restfulAPIBase struct {
 }
 
 func (r *restfulAPIBase) getUrlParam(paramMap map[string]interface{}, ctx *gin.Context) error {
-	paramGetters := map[VariableKind]func(paramName string, target interface{}, ctx *gin.Context) error{
+	paramGetters := map[VariableKind]func(paramName string, target interface{}, ctx *gin.Context) error {
 		UintKind:   r.getUrlIntParam,
 		StringKind: r.getUrlStringParam,
 		BoolKind:   r.getUrlBoolParam,
@@ -38,7 +38,6 @@ func (r *restfulAPIBase) getUrlParam(paramMap map[string]interface{}, ctx *gin.C
 		if nil != err {
 			break
 		}
-
 	}
 
 	return err

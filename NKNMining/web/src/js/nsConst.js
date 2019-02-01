@@ -3,7 +3,6 @@ let inputIdPrefix = function () {
 }
 
 let serverStatus = new function () {
-  this.NS_STATUS_CTEATE_ACCOUNT = ()=>{return 0}
   this.NS_STATUS_GEN_WALLET = ()=>{return 1}
   this.NS_STATUS_NODE_RUNNING = ()=>{return 2}
   this.NS_STATUS_NODE_EXITED = ()=>{return 3}
@@ -11,8 +10,7 @@ let serverStatus = new function () {
   this.NS_STATUS_INITIALIZATION = ()=>{return 5}
 }
 
-
 export {
   inputIdPrefix,
-  serverStatus
+  serverStatus,
 }
