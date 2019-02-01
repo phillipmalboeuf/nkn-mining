@@ -1,73 +1,60 @@
----
-description: NKN mining web application.
----
-
 # nkn-mining
 
-## How to build 🍀 
+NKN mining web application. 
 
- **Note: This build script only tested on Mac OS X**
++ [How to use](#How-to-use)
+    - [For home users](#For-home-users)
+    - [For cloud users](#For-cloud-users)
++ [Migrate from version under 0.2.0](#migrate-from-version-under-020)
 
-1. intall npm & golang first
-2. clone or download this repository
-3. cd to the directory
-4. run ./build.sh script
-5. when script done, you will find the output file under ./dist directory
 
-## How to use 🍀 
+## How to use 
 
 ### What do you need first!
 
 1. A computer to run the NKNMining application
 2. A public ipv4 address
-3. Permission of port open between 30000 ~ 30003
+3. Permission of port open between 30001 ~ 30003 and port 8181
 
-### step 0 ☘ 
 
-Upload the package to your server and run NKNMining program.
+### For home users 
+1. Download the zip file from the lastest [release](https://github.com/nknorg/nkn-mining/releases).
+2. Unzip the file to any directory you want.
+3. Open a command line window, and cd to the directory where the  NKNMining file is. e.g:
+4. Run the NKNMining program. e.g:
+5. Open http://127.0.0.1:8181/web/  to start NKN mining travel. e.g:
+    - Create a new wallet or load an exits one.
+    ![](.gitbook/en/local_create.png)
+    - Sing in
+    ![](.gitbook/en/show_wallet.png)
+    - Start mining
+    ![](.gitbook/en/mining.png)
 
-NKNMining will output a 40 character length ‘serial number’ .
-
+### For cloud users 
+1. Download the zip file to your server from the lastest [release](https://github.com/nknorg/nkn-mining/releases).
+2. Unzip the file to any directory you want.
+3. Run the NKNMining program with parameter --remote. NKNMining will output a 40 character length ‘serial number’. e.g:
 ```text
-$ ./NKNMining
+$ ./NKNMining --remote
 $ serial number(sn): NKN-fef5d6b5-ba56-11e8-9c0b-260049909001
 ```
 
-### step 1 ☘ 
+4. Open http://ip:8181/web/ to start NKN mining travel. e.g:
+    - Create a new wallet or load an exits one (this step request serial number).
+    ![](.gitbook/en/remote_create.png)
+    - Sing in
+    ![](.gitbook/en/show_wallet.png)
+    - Start mining
+    ![](.gitbook/en/mining.png)
 
-Open http://ip:8181/web/  to create your control account.e.g:
 
-```text
-http://127.0.0.1:8181/web/
-```
+## Migrate from version under 0.2.0
+1. Download your wallet file from the webpage. e.g:
+2. Restart your computer or your server.
+3. Setup version V0.2.0 NKNMining with the wallet you downloaded.
 
-![](.gitbook/assets/step1.png)
-
-**Note: ‘System initialization serial number’ here is the ‘serial number’ string from step 0.**
-
-### step 2 ☘ 
-
-Generate a wallet for node running.
-
-![](.gitbook/assets/step2.png)
-
-**Note: password in this page is for wallet.**
-
-### step 3 ☘ 
-
-In this step you will see your wallet information.Also you can click ‘Download wallet’ button to save your wallet file.
-
-![](.gitbook/assets/step3.png)
-
-### step 4 ☘ 
-
-The NKN node is setup already! Now you can turn on/off your node to mining NKN or transfer some NKN you mined to someone else.
-
-![](.gitbook/assets/step4.png)
-
-### Q&A ☘ 
+## Q&A 
 
 Discord: [https://discord.gg/wUBNKFm](https://discord.gg/wUBNKFm)
 
  **Note: This repository is in the early development stage and may not have all functions working properly. It should be used only for testing now.**
-
