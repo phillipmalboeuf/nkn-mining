@@ -1,5 +1,7 @@
 # nkn-mining
 
+#### [中文说明](https://github.com/nknorg/nkn-mining/blob/master/README_ZH.md)
+
 NKN mining web application. 
 
 + [How to use](#How-to-use)
