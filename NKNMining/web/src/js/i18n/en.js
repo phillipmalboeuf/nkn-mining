@@ -62,7 +62,7 @@ module.exports = {
       mining:{
         downloading: "you can't start mining when downloading NKN node program.",
         fail: 'start mining failed. please check log on the server.',
-        error: "you can't mining when node updating.",
+        error: "you can't mine when node updating.",
         stopfail: 'stop mining failed. please check log on the server.'
       },
       nodeStatus:{
